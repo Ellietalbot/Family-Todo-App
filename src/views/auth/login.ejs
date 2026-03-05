@@ -1,0 +1,48 @@
+<%- include('../partials/header') %>
+    <main>
+
+        <div class="login-content">
+            <div class="login">
+                <h3>Create New Task</h3>
+                <p>Create a task for yourself or assign it to a family member</p>
+                <form method="POST" class="create-task">
+                    <div class="form-group">
+                        <label for="task-title">Task Title</label>
+                        <input type="text" id="task-title" name="task-title" placeholder="Enter task title...">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="task-description">Description (optional)</label>
+                        <input type="text" id="task-description" name="task-description" placeholder="Add more details...">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select id="category" name="category">
+                            <option value="other">📌 Other</option>
+                            <option value="chores">🫧 Chores</option>
+                            <option value="homework">📖 Homework</option>
+                            <option value="errands">🛒 Errands</option>
+                            <option value="personal">✨ Personal</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="assign-to">Assign To</label>
+                        <select id="assign-to" name="assign to">
+                            <option value="myself">Keep for myself</option>
+                            <option value="temp-harcoded">Temp hardcoded</option>
+                        </select>
+                    </div>
+                    <button type="submit">Create Task</button>
+                </form>
+            </div>
+            <div>
+                <img class="login-image" src="/images/family-login.jpg">
+            </div>
+        </div>
+
+
+
+    </main>
+    <%- include('../partials/footer') %>
