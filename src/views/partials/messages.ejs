@@ -1,11 +1,13 @@
-<% if (error) { %>
-<div class="error">
-    <%= error %>
+<div class="task-card">
+    <div class="task-card-top">
+        <div class="task-card-info">
+            <p><strong>Task Name</strong> <i class="bi bi-house-heart"></i>Chores <span class="status">Pending</span></p>
+            <p>Description</p>
+            <p>Created by: Person &nbsp; Assigned to: Alex</p>
+        </div>
+        <div class="task-actions">
+            <button>Accept</button>
+            <button class="btn-deny">Deny</button>
+        </div>
+    </div>
 </div>
-<% } %>
-
-<% if (success) { %>
-<div class="success">
-    <%= success %>
-</div>
-<% } %>

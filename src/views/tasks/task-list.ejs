@@ -1,0 +1,35 @@
+<%- include('../partials/header') %>
+
+    <main>
+        <div class="task-layout">
+            <div class="pending-task">
+                <h3><i class="bi bi-mailbox-flag"></i> Pending Requests (1)</h3>
+                <p>Tasks assigned to you waiting for acceptance</p>
+
+                <%- include('../partials/messages') %>
+
+            </div>
+
+            <div class="home-section">
+                <h3>My Tasks</h3>
+                <p>Manage your personal and accepted tasks.</p>
+                <div class="task-types">
+                    <button class="active">Active</button>
+                    <button>Completed</button>
+                    <button>Delegated</button>
+                </div>
+                
+            </div>
+        </div>
+    </main>
+    <script>
+        const taskTypeButtons = document.querySelectorAll('.task-types button');
+        
+        taskTypeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                taskTypeButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+            });
+        });
+    </script>
+    <%- include('../partials/footer') %>

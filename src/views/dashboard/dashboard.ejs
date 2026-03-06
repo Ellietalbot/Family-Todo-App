@@ -19,11 +19,11 @@
                 <div class="form-group">
                     <label for="category">Category</label>
                     <select id="category" name="category">
-                        <option value="other">📌 Other</option>
-                        <option value="chores">🫧 Chores</option>
-                        <option value="homework">📖 Homework</option>
-                        <option value="errands">🛒 Errands</option>
-                        <option value="personal">✨ Personal</option>
+                        <option value="other">Other</option>
+                        <option value="chores">Chores</option>
+                        <option value="homework">Homework</option>
+                        <option value="errands">Errands</option>
+                        <option value="personal">Personal</option>
                     </select>
                 </div>
 
@@ -43,21 +43,34 @@
             <p>Manage your personal and accepted tasks.</p>
             
             <div class="task-types">
-                <button>Active</button>
+                <button class="active">Active</button>
                 <button>Completed</button>
                 <button>Delegated</button>
             </div>
             <div class="task-card">
-                <p>Task Name</p>
-                <p>Category</p>
-                <p>Status</p>
-                <p>Description</p>
-                <p>Created by: Person</p>
-                <button>Complete</button>
-                <button>trash</button>
-
-            </div>
+                <div class="task-card-top">
+                    <div class="task-card-info">
+                        <p><strong class="task-title">Task Name</strong> <span class='task-category-tag'><i class="bi bi-pin-angle"></i> Category</span> <span class="status">Accepted</span></p>
+                    </div>
+                    <div class="task-actions">
+                        <button>Complete</button>
+                        <button class="btn-delete"><i class="bi bi-trash"></i></button>
+                    </div>
+                </div>
+                    <p>Description</p>
+                    <p>Created by: Person</p>
+                </div>
         </div>
 
     </main>
+    <script>
+        const taskTypeButtons = document.querySelectorAll('.task-types button');
+        
+        taskTypeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                taskTypeButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+            });
+        });
+    </script>
     <%- include('../partials/footer') %>

@@ -3,55 +3,50 @@ html, body {
     font-family: Georgia, 'Times New Roman', Times, serif;
     margin: 0;
     padding: 20px;
-
 }
-main{
+main {
     display: flex;
     flex-direction: row;
     gap: 60px;
     margin: 60px;
 }
-.home-section{
+.home-section {
     background-color: white;
     padding: 30px;
     flex: 1;
     border-radius: 25px;
 }
-.home-section h3, p{
-    padding-left:30px;
+.home-section h3, p {
+    padding-left: 30px;
     color: #2d2d2e;
 }
-h3{
+h3 {
     font-size: x-large;
     font-weight: 400;
     padding-left: 25px;
 }
-p{
+p {
     color: #5d5d5e;
 }
-.form-group{
+.form-group {
     display: flex;
     flex-direction: column;
     padding: 20px;
-    gap:10px;
+    gap: 10px;
 }
-
-button{
+button {
     background-color: #e87c58;
     color: white;
     border: none;
-    align-content: center;
     font-family: Georgia, 'Times New Roman', Times, serif;
     height: 50px;
     border-radius: 10px;
 }
-.create-task button{
-
+.create-task button {
     font-size: medium;
     width: 100%;
-
 }
-.form-group input{
+.form-group input {
     height: 50px;
     background-color: whitesmoke;
     border: none;
@@ -60,12 +55,9 @@ button{
     font-family: sans-serif;
     font-size: medium;
 }
-.form-group label{
+.form-group label {
     font-size: medium;
     font-weight: 400;
-}
-#task-description{
-    height: 100px;
 }
 select {
     background-color: whitesmoke;
@@ -86,7 +78,7 @@ select {
 select:hover {
     background-color: #e8e8e8;
 }
-input:hover{
+input:hover {
     background-color: #e8e8e8;
 }
 .task-types {
@@ -97,7 +89,6 @@ input:hover{
     margin: 10px 30px 20px 30px;
     gap: 0;
 }
-
 .task-types button {
     flex: 1;
     background-color: transparent;
@@ -107,17 +98,14 @@ input:hover{
     font-size: medium;
     transition: background-color 0.2s ease;
 }
-
 .task-types button.active {
     background-color: white;
     color: #2d2d2e;
     box-shadow: 0 1px 4px rgba(0,0,0,0.1);
 }
-
 .task-types button:hover:not(.active) {
     background-color: #e8e2dc;
 }
-
 .task-card {
     margin: 0 30px;
     background-color: whitesmoke;
@@ -126,58 +114,80 @@ input:hover{
     display: flex;
     flex-direction: column;
     gap: 5px;
+    border: 1px solid lightgrey;
+    border-left: 4px solid lightgrey;
 }
-.task-card h3{
+.task-card h3 {
     padding-left: 0;
     margin: 0;
     font-size: larger;
 }
-
 .task-card p {
     padding-left: 0;
     margin: 0;
     font-size: medium;
     font-family: sans-serif;
 }
-.status{
-    background-color:rgb(148, 198, 255);
-    color: rgb(30, 54, 81);
-    border-radius: 30px;
-    padding: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-}
-
-.task-card p:first-child {
+.status {
     font-size: medium;
-    color: #2d2d2e;
-    font-weight: 500;
+    background-color: rgb(212, 230, 251);
+    border:1px solid rgb(6, 56, 113) ;
+    color: rgb(30, 54, 81);
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-family: sans-serif;
 }
+.task-category-tag{
+    font-size: medium;
+    
+}
+.task-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    
+}
+.task-card-info {
+    flex: 1;
 
+
+}
+.task-card-info p {
+    margin: 8px 0;
+    padding-left: 0;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+.task-title{
+    font-size: large;
+}
+.task-card-info p span {
+    margin-left: 20px;
+}
 .task-card .task-actions {
     display: flex;
     gap: 10px;
-    margin-top: 10px;
+    align-items: center;
 }
-
 .task-card .task-actions button {
-    height: 38px;
-    font-size: medium;
-    flex: 1;
+    height: auto !important;
+    width: auto;
+    flex: none;
+    padding: 10px 20px;
 }
-
 .task-card .task-actions .btn-delete {
     background-color: transparent;
     color: #5d5d5e;
-    border: 1px solid #ddd;
+    width: 42px !important;
+    height: 42px !important;
+    padding: 0;
+    font-size: large;
 }
-
 .task-card .task-actions .btn-delete:hover {
     background-color: #f5e8e4;
     color: #e87c58;
     border-color: #e87c58;
 }
-
 .no-tasks {
     text-align: center;
     padding: 30px;
@@ -193,7 +203,37 @@ input:hover{
     border: none;
     border-radius: 10px;
 }
-
 #task-description:hover {
     background-color: #e8e8e8;
+}
+.task-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 100%;
+}
+.pending-task {
+    background-color: #fffde7;
+    border: 2px solid rgb(222, 222, 0);
+    
+    border-radius: 25px;
+    padding: 30px;
+}
+.pending-task .task-card {
+    background-color: #fffde7;
+    border: 1px solid rgb(222, 222, 0);
+    border-left: 4px solid rgb(222, 222, 0);
+}
+.pending-task button {
+    width: auto;
+    height: auto !important;
+    padding: 10px 24px;
+    line-height: 1.4;
+}
+.btn-deny {
+    background-color: #c0392b;
+}
+
+.btn-deny:hover {
+    background-color: #a93226;
 }
