@@ -8,14 +8,19 @@
     "dev": "nodemon --env-file=.env server.js",
     "start": "node server.js"
   },
+  "type": "module",
   "keywords": [],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.27.0",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "bootstrap-icons": "^1.13.1",
+    "connect-flash": "^0.1.1",
     "ejs": "^4.0.1",
     "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "express-validator": "^7.3.1",
     "pg": "^8.19.0"
   },
   "devDependencies": {
