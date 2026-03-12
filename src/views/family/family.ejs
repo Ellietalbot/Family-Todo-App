@@ -6,45 +6,26 @@
                 <hr>
             </div>
             <div class="person-cards-row">
-                <div class="home-section">
-                    <div class="card-head">
+                <% users.filter(member => member.role === 'parent').forEach(member => { %>
+                    <div class="home-section">
                         <div class="person-heading">
                             <img class="profile-pic" src="/images/mom-profile-pic.jpg" alt="profile picture">
                             <div class="person-title">
-                                <h3>Mom</h3>
-                                <p><i class="bi bi-person"></i>Role</p>
+                                <h3><%=member.name%></h3>
+                                <p><i class="bi bi-person"></i><%=member.role%></p>
+                            </div>
+                            <div class="tasks-person-completed">
+                                <h3><%=member.completed_tasks%></h3>
+                                <p>Completed</p>
                             </div>
                         </div>
-                        <div class="tasks-person-completed">
-                            <h3>#</h3>
-                            <p>Completed</p>
+                        <hr>
+                        <div class="task-list-link">
+                            <p><a>Click to View Name's Tasks</a><i class="bi bi-caret-right-fill"></i></p>
                         </div>
                     </div>
-                    <hr>
-                    <div class="task-list-link">
-                        <p><a>Click to View Name's Tasks</a><i class="bi bi-caret-right-fill"></i></p>
-                    </div>
-                </div>
 
-                <div class="home-section">
-                    <div class="card-head">
-                        <div class="person-heading">
-                            <img class="profile-pic" src="/images/dad-profile-pic.png" alt="profile picture">
-                            <div class="person-title">
-                                <h3>Dad</h3>
-                                <p><i class="bi bi-person"></i>Role</p>
-                            </div>
-                        </div>
-                        <div class="tasks-person-completed">
-                            <h3>#</h3>
-                            <p>Completed</p>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="task-list-link">
-                        <p><a>Click to View Name's Tasks</a><i class="bi bi-caret-right-fill"></i></p>
-                    </div>
-                </div>
+                <% }) %>
             </div>
         </div>
         <div class="person-section">
@@ -53,45 +34,27 @@
                 <hr>
             </div>
             <div class="person-cards-row">
-                <div class="home-section">
-                    <div class="card-head">
+                <% users.filter(member => member.role === 'child').forEach(member => { %>
+                    <div class="home-section">
                         <div class="person-heading">
-                            <img class="profile-pic" src="/images/boy-profile-pic.png" alt="profile picture">
+                            <img class="profile-pic" src="/images/mom-profile-pic.jpg" alt="profile picture">
                             <div class="person-title">
-                                <h3>Micah</h3>
-                                <p><i class="bi bi-person"></i>Role</p>
+                                <h3><%=member.name%></h3>
+                                <p><i class="bi bi-person"></i><%=member.role%></p>
+                            </div>
+                            <div class="tasks-person-completed">
+                                <h3><%=member.completed_tasks%></h3>
+                                <p>Completed</p>
                             </div>
                         </div>
-                        <div class="tasks-person-completed">
-                            <h3>#</h3>
-                            <p>Completed</p>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="task-list-link">
-                        <p><a>Click to View Name's Tasks</a><i class="bi bi-caret-right-fill"></i></p>
-                    </div>
-                </div>
 
-                <div class="home-section">
-                    <div class="card-head">
-                        <div class="person-heading">
-                            <img class="profile-pic" src="/images/girl-profile-pic.png" alt="profile picture">
-                            <div class="person-title">
-                                <h3>Gabby</h3>
-                                <p><i class="bi bi-person"></i>Role</p>
-                            </div>
-                        </div>
-                        <div class="tasks-person-completed">
-                            <h3>#</h3>
-                            <p>Completed</p>
+                        <hr>
+                        <div class="task-list-link">
+                            <p><a>Click to View Name's Tasks</a><i class="bi bi-caret-right-fill"></i></p>
                         </div>
                     </div>
-                    <hr>
-                    <div class="task-list-link">
-                        <p><a>Click to View Name's Tasks</a><i class="bi bi-caret-right-fill"></i></p>
-                    </div>
-                </div>
+
+                <% }) %>
             </div>
         </div>
     </main>

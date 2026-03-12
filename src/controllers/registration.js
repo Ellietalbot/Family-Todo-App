@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { body, validationResult } from 'express-validator';
 import bcrypt from 'bcrypt';
 import { emailExists, saveUser, getAllUsers, deleteUser } from '../models/forms/registration.js'; // Fix 1: corrected path (was ../../), added deleteUser
-
+import { requireLogin } from '../middleware/auth.js';
 const router = Router();
 
 const registrationValidation = [
@@ -78,7 +78,7 @@ const showAllUsers = async (req, res) => {
         console.error('Error retrieving users:', error);
     }
 
-    res.render('forms/registration/list', {
+    res.render('admin/manage-users', {
         title: 'Registered Users',
         users,
         user: req.session && req.session.user ? req.session.user : null
@@ -91,12 +91,12 @@ const processDeleteAccount = async (req, res) => {
 
     if (currentUser.roleName !== 'admin') {
         req.flash('error', 'You do not have permission to delete accounts.');
-        return res.redirect('/register/list');
+        return res.redirect('/admin/manage-users');
     }
 
     if (currentUser.id === targetUserId) {
         req.flash('error', 'You cannot delete your own account.');
-        return res.redirect('/register/list');
+        return res.redirect('/admin/manage-users');
     }
 
     try {
@@ -112,15 +112,9 @@ const processDeleteAccount = async (req, res) => {
         req.flash('error', 'An error occurred while deleting the account.');
     }
 
-    res.redirect('/register/list');
+    res.redirect('/admin/manage-users');
 };
 
-
-const requireLogin = (req, res, next) => {
-    if (req.session && req.session.user) return next();
-    req.flash('warning', 'You must be logged in to do that.');
-    res.redirect('/login');
-};
 
 const showEditAccountForm = async (req, res) => {
     res.send('Edit account form - not yet implemented');

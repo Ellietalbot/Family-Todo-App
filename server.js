@@ -3,6 +3,10 @@ import session from 'express-session';
 import flash from 'connect-flash';
 import { setupDatabase, testConnection } from './src/models/setup.js';
 import registrationRouter from './src/controllers/registration.js';
+import loginRouter from './src/controllers/login.js';
+import { processLogout } from './src/controllers/login.js';
+import { requireLogin } from './src/middleware/auth.js';
+import { returnFamilyMembers } from './src/controllers/family.js';
 
 const app = express();
 
@@ -28,24 +32,21 @@ app.use((req, res, next) => {
 
 app.use(express.static('./src/public'));
 
-app.get('/', (req, res) => {
+app.get('/', requireLogin, (req, res) => {
     const title = 'Dashboard';
     res.render('dashboard/dashboard', { title });
 });
-app.get('/family', (req, res) => {
-    const title = 'My Family';
-    res.render('family/family', { title });
-});
-app.get('/login', (req, res) => {
-    const title = 'Login';
-    res.render('login/form', { title });
-});
-app.get('/tasks', (req, res) => {
+app.get('/family', requireLogin, returnFamilyMembers);
+app.get('/tasks', requireLogin, (req, res) => {
     const title = 'Tasks';
     res.render('tasks/task-list', { title });
 });
 
+app.post('/logout', processLogout);
+
+app.use('/login', loginRouter);
 app.use('/register', registrationRouter);
+
 const PORT = 3000;
 
 app.listen(PORT, async () => {
