@@ -1,7 +1,3 @@
-
-/**
- * Helper function to get the current greeting based on the time of day.
- */
 const getCurrentGreeting = () => {
     const currentHour = new Date().getHours();
 
@@ -16,29 +12,17 @@ const getCurrentGreeting = () => {
     return 'Good Evening!';
 };
 
-/**
- * Middleware to add local variables to res.locals for use in all templates.
- * Templates can access these values but are not required to use them.
- */
 const addLocalVariables = (req, res, next) => {
-    // Set current year for use in templates
     res.locals.currentYear = new Date().getFullYear();
-
-    // Make NODE_ENV available to all templates
     res.locals.NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
-
-    // Make req.query available to all templates
     res.locals.queryParams = { ...req.query };
-
-    // Set greeting based on time of day
     res.locals.greeting = `<p>${getCurrentGreeting()}</p>`;
 
     res.locals.isLoggedIn = false;
     if (req.session && req.session.user) {
-    res.locals.isLoggedIn = true;
+        res.locals.isLoggedIn = true;
     }
 
-    // Continue to the next middleware or route handler
     next();
 };
 

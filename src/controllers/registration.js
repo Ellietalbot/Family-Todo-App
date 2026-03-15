@@ -107,12 +107,11 @@ const processDeleteAccount = async (req, res) => {
     const targetUserId = parseInt(req.params.id);
     const currentUser = req.session.user;
 
-    if (currentUser.roleName !== 'admin') {
+    if (currentUser.role !== 'admin') {  // was roleName
         req.flash('error', 'You do not have permission to delete accounts.');
         return res.redirect('/admin/manage-users');
     }
-
-    if (currentUser.id === targetUserId) {
+    if (currentUser.user_id === targetUserId){
         req.flash('error', 'You cannot delete your own account.');
         return res.redirect('/admin/manage-users');
     }

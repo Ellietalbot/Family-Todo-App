@@ -35,31 +35,29 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     cookie: {
-        secure: process.env.NODE_ENV?.includes('dev') !== true,
+        secure: process.env.NODE_ENV?.includes('dev') === false,
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000
     }
 }));
 
 startSessionCleanup();
+app.use(express.urlencoded({ extended: true }));
 app.use(flash());
 app.use(addLocalVariables);
-app.use(express.urlencoded({ extended: true }));
+    app.use((req, res, next) => {
+        res.locals.messages = {
+            success: req.flash('success'),
+            warning: req.flash('warning'),
+            error: req.flash('error')
+        };
+        next();
+    });
+
 
 app.set('view engine', 'ejs');
 app.set('views', './src/views');
 app.use(express.static('./src/public'));
-
-
-
-app.use((req, res, next) => {
-    res.locals.messages = {
-        success: req.flash('success'),
-        warning: req.flash('warning'),
-        error: req.flash('error')
-    };
-    next();
-});
 
 
 app.get('/', requireLogin, (req, res) => {
