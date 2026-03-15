@@ -36,6 +36,24 @@
                         Must be at least 8 characters with a number and special character.
                     </div>
                 </div>
+                <div class="form-group">
+                    <label>Are you joining or creating a family?</label>
+                    <div class="family-toggle">
+                        <button type="button" id="btn-join" class="toggle-btn active">Join a Family</button>
+                        <button type="button" id="btn-create" class="toggle-btn">Create a Family</button>
+                    </div>
+                    <input type="hidden" name="familyAction" id="familyAction" value="join">
+                </div>
+
+                <div class="form-group" id="join-group">
+                    <label for="invite_code">Invite Code</label>
+                    <input type="text" id="invite_code" name="invite_code" placeholder="e.g. SMITH-A4B9" required>
+                </div>
+
+                <div class="form-group" id="create-group" style="display:none;">
+                    <label for="family_name">Family Name</label>
+                    <input type="text" id="family_name" name="family_name" placeholder="e.g. Smith" minlength="2">
+                </div>
                 
                 <div class="form-group">
                     <button type="submit">Create Account</button>
@@ -53,3 +71,33 @@
 
     </main>
 <%- include('../partials/footer') %>
+<script>
+    const btnJoin = document.getElementById('btn-join');
+    const btnCreate = document.getElementById('btn-create');
+    const joinGroup = document.getElementById('join-group');
+    const createGroup = document.getElementById('create-group');
+    const familyAction = document.getElementById('familyAction');
+
+    const inviteInput = document.getElementById('invite_code');
+    const familyNameInput = document.getElementById('family_name');
+
+    btnJoin.addEventListener('click', () => {
+        familyAction.value = 'join';
+        joinGroup.style.display = 'block';
+        createGroup.style.display = 'none';
+        inviteInput.required = true;
+        familyNameInput.required = false;
+        btnJoin.classList.add('active');
+        btnCreate.classList.remove('active');
+    });
+
+    btnCreate.addEventListener('click', () => {
+        familyAction.value = 'create';
+        joinGroup.style.display = 'none';
+        createGroup.style.display = 'block';
+        inviteInput.required = false;
+        familyNameInput.required = true;
+        btnCreate.classList.add('active');
+        btnJoin.classList.remove('active');
+    });
+</script>

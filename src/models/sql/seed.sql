@@ -8,14 +8,23 @@ DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS task CASCADE;
 DROP TABLE IF EXISTS task_history CASCADE;
 DROP TABLE IF EXISTS comments CASCADE;
+DROP TABLE IF EXISTS family CASCADE;
+
+CREATE TABLE family (
+    family_id SERIAL PRIMARY KEY NOT NULL,
+    family_name VARCHAR(255),
+    invite_code VARCHAR(50) UNIQUE,
+    created_at DATE DEFAULT NOW()
+);
 
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY NOT NULL,
     name VARCHAR(100),
-    email VARCHAR(150),
+    email VARCHAR(150) UNIQUE,
     role role_enum,
-    created_at DATE,
-    password_hash TEXT
+    created_at DATE DEFAULT NOW(),
+    password_hash TEXT,
+    family_id INT REFERENCES family(family_id)
 );
 
 CREATE TABLE task (
@@ -26,15 +35,16 @@ CREATE TABLE task (
     assigned_to INT REFERENCES users(user_id),
     status status_enum,
     category category_enum,
-    created_at DATE,
-    due_date DATE
+    created_at DATE DEFAULT NOW(),
+    due_date DATE,
+    family_id INT REFERENCES family(family_id)
 );
 
 CREATE TABLE task_history (
     history_id SERIAL PRIMARY KEY NOT NULL,
     task_id INT REFERENCES task(task_id),
     changed_by INT REFERENCES users(user_id),
-    changed_at DATE,
+    changed_at DATE DEFAULT NOW(),
     old_status VARCHAR(50),
     new_status status_enum
 );
@@ -44,7 +54,15 @@ CREATE TABLE comments (
     task_id INT REFERENCES task(task_id),
     user_id INT REFERENCES users(user_id),
     content TEXT,
-    created_at DATE
+    created_at DATE DEFAULT NOW()
 );
-INSERT INTO users (name, email, password_hash, role) VALUES ('mom', 'email123@gmail.com', '$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uklCt7f5W', 'parent'), ('dad', 'emaildad@gmail.com', '$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uklCt7f5W', 'parent'), ('Micah', 'Micahkid@gmail.com', '$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uklCt7f5W', 'child'), ('Gabby', 'Gabby@gmail.com', '$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uklCt7f5W', 'child');
+
+INSERT INTO family (family_name, invite_code) VALUES ('The Smiths', 'SMITH-0001');
+
+INSERT INTO users (name, email, password_hash, role, family_id) VALUES 
+    ('mom', 'email123@gmail.com', '$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uklCt7f5W', 'parent', 1),
+    ('dad', 'emaildad@gmail.com', '$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uklCt7f5W', 'parent', 1),
+    ('Micah', 'Micahkid@gmail.com', '$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uklCt7f5W', 'child', 1),
+    ('Gabby', 'Gabby@gmail.com', '$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uklCt7f5W', 'child', 1);
+
 COMMIT;

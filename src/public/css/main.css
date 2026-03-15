@@ -237,3 +237,40 @@ input:hover {
 .btn-deny:hover {
     background-color: #a93226;
 }
+.flash-messages {
+    margin: 1rem auto;
+    max-width: 1200px;
+    padding: 0 1rem;
+}
+.flash {
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+    border-left: 4px solid;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.flash.success {
+    background-color: #d4edda;
+    border-color: #28a745;
+    color: #155724;
+}
+
+.flash.error {
+    background-color: #f8d7da;
+    border-color: #dc3545;
+    color: #721c24;
+}
+
+.flash.warning {
+    background-color: #fff3cd;
+    border-color: #ffc107;
+    color: #856404;
+}
+
+.flash.info {
+    background-color: #d1ecf1;
+    border-color: #17a2b8;
+    color: #0c5460;
+}

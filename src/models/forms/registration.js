@@ -13,12 +13,13 @@ const emailExists = async (email) => {
 // @param {string} hashedPassword
 // @returns {Promise<Object>}
 
-const saveUser = async (name, email, hashedPassword) => {
-    const query = `INSERT INTO users (name, email, password_hash, role) VALUES ($1, $2, $3, $4) RETURNING user_id, name, email, created_at`;
-    const result = await db.query(query, [name, email, hashedPassword, 'child']);
+const saveUser = async (name, email, hashedPassword, role, familyId) => {
+    const query = `INSERT INTO users (name, email, password_hash, role, family_id) 
+                   VALUES ($1, $2, $3, $4, $5) 
+                   RETURNING user_id, name, email, created_at`;
+    const result = await db.query(query, [name, email, hashedPassword, role, familyId]);
     return result.rows[0];
 };
-
 
 // @returns {Promise<Array>}
 const getAllUsers = async () => {
@@ -34,5 +35,46 @@ const deleteUser = async (userId) => {
     const result = await db.query(query, [userId]);
     return result.rowCount > 0;
 };
+const generateInviteCode = (familyName) => {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const part1 = familyName.trim().toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 5);
+    let part2 = '';
+    for (let i = 0; i < 4; i++){
+        part2 += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return `${part1}-${part2}`;
+}
+const generateUniqueInviteCode = async (familyName) => {
+    let code;
+    let exists = true;
 
-export { emailExists, saveUser, getAllUsers, deleteUser };
+    while (exists) {
+        code = generateInviteCode(familyName);
+        const result = await db.query(
+            `SELECT 1 FROM family WHERE invite_code = $1`,
+            [code]
+        );
+        exists = result.rows.length > 0;
+    }
+
+    return code;
+};
+const createFamily = async (familyName, inviteCode) => {
+    const result = await db.query(
+        `INSERT INTO family (family_name, invite_code) 
+         VALUES ($1, $2) 
+         RETURNING *`,
+        [familyName, inviteCode]
+    );
+    return result.rows[0];
+};
+
+const findFamilyByInviteCode = async (inviteCode) => {
+    const result = await db.query(
+        `SELECT * FROM family WHERE invite_code = $1`,
+        [inviteCode.toUpperCase().trim()]
+    );
+    return result.rows[0] || null;
+};
+
+export { emailExists, saveUser, getAllUsers, deleteUser, generateUniqueInviteCode, findFamilyByInviteCode, createFamily };

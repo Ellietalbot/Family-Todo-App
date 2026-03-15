@@ -36,7 +36,7 @@ const processLogin = async (req, res) => {
             return res.redirect('/login');
         }
 
-        const passwordIsValid = await verifyPassword(password, user.password);
+        const passwordIsValid = await verifyPassword(password, user.password_hash);
 
         if(!passwordIsValid){
             req.flash('error', 'Invalid email or password')

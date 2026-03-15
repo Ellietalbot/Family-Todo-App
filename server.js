@@ -1,5 +1,7 @@
 import express from 'express';
 import session from 'express-session';
+import connectPgSimple from 'connect-pg-simple';
+import { caCert } from './src/models/db.js';
 import flash from 'connect-flash';
 import { setupDatabase, testConnection } from './src/models/setup.js';
 import registrationRouter from './src/controllers/registration.js';
@@ -7,19 +9,48 @@ import loginRouter from './src/controllers/login.js';
 import { processLogout } from './src/controllers/login.js';
 import { requireLogin } from './src/middleware/auth.js';
 import { returnFamilyMembers } from './src/controllers/family.js';
+import { startSessionCleanup } from './src/utils/session-cleanup.js';
+import { addLocalVariables } from './src/middleware/global.js';
 
+console.log('SESSION_SECRET loaded:', !!process.env.SESSION_SECRET);
 const app = express();
+
+const pgSession = connectPgSimple(session);
+
+app.use(session({
+    store: new pgSession({
+        conObject: {
+            connectionString: process.env.DB_URL,
+            
+            ssl: {
+                ca: caCert,
+                rejectUnauthorized: true,
+                checkServerIdentity: () => { return undefined; }
+            }
+        },
+        tableName: 'session',
+        createTableIfMissing: true
+    }),
+    secret: process.env.SESSION_SECRET || 'changeme-dev-only',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: process.env.NODE_ENV?.includes('dev') !== true,
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000
+    }
+}));
+
+startSessionCleanup();
+app.use(flash());
+app.use(addLocalVariables);
+app.use(express.urlencoded({ extended: true }));
 
 app.set('view engine', 'ejs');
 app.set('views', './src/views');
-app.use(express.urlencoded({ extended: true }));
-app.use(session({
-    secret: process.env.SESSION_SECRET || 'changeme',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false }
-}));
-app.use(flash());
+app.use(express.static('./src/public'));
+
+
 
 app.use((req, res, next) => {
     res.locals.messages = {
@@ -30,7 +61,6 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(express.static('./src/public'));
 
 app.get('/', requireLogin, (req, res) => {
     const title = 'Dashboard';

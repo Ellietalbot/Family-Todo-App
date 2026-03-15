@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { body, validationResult } from 'express-validator';
 import bcrypt from 'bcrypt';
-import { emailExists, saveUser, getAllUsers, deleteUser } from '../models/forms/registration.js'; // Fix 1: corrected path (was ../../), added deleteUser
+import { emailExists, saveUser, getAllUsers, deleteUser, generateUniqueInviteCode, findFamilyByInviteCode, createFamily } from '../models/forms/registration.js'; // Fix 1: corrected path (was ../../), added deleteUser
 import { requireLogin } from '../middleware/auth.js';
 const router = Router();
 
@@ -37,17 +37,18 @@ const showRegistrationForm = (req, res) => {
     res.render('registration/form', { title: 'User Registration' });
 };
 
+// In registration controller - replace processRegistration with this
 const processRegistration = async (req, res) => { 
     
     const errors = validationResult(req);
-
     if (!errors.isEmpty()) {
         errors.array().forEach(error => {
             req.flash('warning', error.msg);
         });
         return res.redirect('/register');
     }
-    const { name, email, password } = req.body;
+
+    const { name, email, password, familyAction } = req.body;
 
     try {
         const emailAlreadyExists = await emailExists(email);
@@ -57,10 +58,27 @@ const processRegistration = async (req, res) => {
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        await saveUser(name, email, hashedPassword);
 
-        req.flash('success', 'Registration successful! Please log in.');
-        res.redirect('/login');
+        if (familyAction === 'create') {
+            const inviteCode = await generateUniqueInviteCode(req.body.family_name);
+            const family = await createFamily(req.body.family_name, inviteCode);
+            await saveUser(name, email, hashedPassword, 'parent', family.family_id);
+            req.flash('success', `Family created! Your invite code is: ${inviteCode} — share this with your family.`);
+            return res.redirect('/login');
+        }
+
+        if (familyAction === 'join') {
+            const family = await findFamilyByInviteCode(req.body.invite_code);
+            if (!family) {
+                req.flash('error', 'Invalid invite code. Please check with your family.');
+                return res.redirect('/register');
+            }
+            await saveUser(name, email, hashedPassword, 'child', family.family_id);
+            req.flash('success', 'Registration successful! Please log in.');
+            return res.redirect('/login');
+        }
+        req.flash('error', 'Please select whether you are creating or joining a family.');
+        return res.redirect('/register');
 
     } catch (error) {
         console.error('Error saving registration:', error);

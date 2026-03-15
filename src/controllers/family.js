@@ -1,19 +1,18 @@
-import { returnFamilyMemberInfo } from "../models/family.js";
-
+import { returnFamilyMemberInfo, getFamilyById } from "../models/family.js";
 
 const returnFamilyMembers = async (req, res) => {
-
+    const familyId = req.session.user.family_id;
 
     try {
-
-        const info = await returnFamilyMemberInfo();
+        const info = await returnFamilyMemberInfo(familyId);
+        const family = await getFamilyById(familyId);
 
         if(!info){
             req.flash('error', 'No family members to display')
             return res.redirect('/dashboard');
         }
 
-        return res.render('family/family', { title: 'My Family', users: info })
+        return res.render('family/family', { title: 'My Family', users: info, family })
         
     } catch (error) {
         console.error("Error returning family info:", error)
@@ -21,5 +20,6 @@ const returnFamilyMembers = async (req, res) => {
         return res.redirect('/dashboard');
     }
 };
+
 
 export { returnFamilyMembers }

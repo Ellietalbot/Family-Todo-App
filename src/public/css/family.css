@@ -4,6 +4,15 @@
     gap: 60px;
     margin: 60px;
 }
+.family-head{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.family-head h3{
+    font-size: xx-large;
+    color:#e87c58;
+}
 .profile-pic {
     border-radius: 500px;
     width: 100px;
