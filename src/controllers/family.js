@@ -9,7 +9,7 @@ const returnFamilyMembers = async (req, res) => {
 
         if(!info){
             req.flash('error', 'No family members to display')
-            return res.redirect('/dashboard');
+            return res.redirect('/');
         }
 
         return res.render('family/family', { title: 'My Family', users: info, family })

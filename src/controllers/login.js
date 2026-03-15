@@ -44,7 +44,7 @@ const processLogin = async (req, res) => {
         }
 
 
-        delete user.password;
+        delete user.password_hash;
         req.flash('success', 'Successfully logged in')
         req.session.user = user;
         return res.redirect('/')

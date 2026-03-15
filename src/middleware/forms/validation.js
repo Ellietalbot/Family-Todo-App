@@ -55,4 +55,4 @@ const registrationValidation = [
         .withMessage('Passwords must match')
 ];
 
-export { loginValidation }
+export { loginValidation, registrationValidation }

@@ -2,36 +2,10 @@ import { Router } from 'express';
 import { body, validationResult } from 'express-validator';
 import bcrypt from 'bcrypt';
 import { emailExists, saveUser, getAllUsers, deleteUser, generateUniqueInviteCode, findFamilyByInviteCode, createFamily } from '../models/forms/registration.js'; // Fix 1: corrected path (was ../../), added deleteUser
-import { requireLogin } from '../middleware/auth.js';
+import { requireLogin, requireRole } from '../middleware/auth.js';
+import { registrationValidation } from '../middleware/forms/validation.js';
 const router = Router();
 
-const registrationValidation = [
-    body('name')
-    .trim()
-    .isLength({ min: 2})
-    .withMessage("Name must be at least 2 characters."),
-    body('email')
-    .trim()
-    .isEmail()
-    .normalizeEmail()
-    .withMessage("Must be a valid email address."),
-    body('emailConfirm')
-    .trim()
-    .isEmail()
-    .normalizeEmail()
-    .custom((value, { req }) => value === req.body.email)
-    .withMessage("Emails must match."),
-    body('password')
-    .trim()
-    .isLength({ min: 8 })
-    .matches(/[0-9]/)
-    .withMessage("Password must contain at least one number")
-    .matches(/[!@#$%^&*]/)
-    .withMessage("Password must contain at least one special character"),
-    body('password-confirm')
-    .custom((value, {req}) => value === req.body.password)
-    .withMessage("Passwords must match")
-];
 
 const showRegistrationForm = (req, res) => {
     res.render('registration/form', { title: 'User Registration' });
@@ -145,9 +119,9 @@ const processEditAccount = async (req, res) => {
 
 router.get('/', showRegistrationForm);
 router.post('/', registrationValidation, processRegistration);
-router.get('/list', showAllUsers);
+router.get('/list', requireLogin, showAllUsers);
 router.get('/:id/edit', requireLogin, showEditAccountForm);
 router.post('/:id/edit', requireLogin, updateAccountValidation, processEditAccount);
-router.post('/:id/delete', requireLogin, processDeleteAccount);
+router.post('/:id/delete', requireLogin, requireRole('admin'), processDeleteAccount);
 
 export default router;
