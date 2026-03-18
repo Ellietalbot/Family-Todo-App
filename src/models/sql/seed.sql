@@ -33,7 +33,7 @@ CREATE TABLE task (
     description TEXT,
     created_by INT REFERENCES users(user_id),
     assigned_to INT REFERENCES users(user_id),
-    status status_enum,
+    status status_enum DEFAULT 'active',
     category category_enum,
     created_at DATE DEFAULT NOW(),
     due_date DATE,

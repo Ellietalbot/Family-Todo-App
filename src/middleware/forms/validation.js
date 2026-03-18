@@ -18,24 +18,24 @@ const loginValidation = [
 
 
 const registrationValidation = [
+    body('name').trim(),
+    body('email').trim().normalizeEmail(),
+    body('emailConfirm').trim().normalizeEmail(),
+    body('password').trim(),
+    body('passwordConfirm').trim(),
+
     body('name')
-        .trim()
         .isLength({ min: 2, max: 100 })
         .withMessage('Name must be between 2 and 100 characters')
         .matches(/^[a-zA-Z\s'-]+$/)
         .withMessage('Name can only contain letters, spaces, hyphens, and apostrophes'),
     body('email')
-        .trim()
         .isEmail()
-        .normalizeEmail()
         .withMessage('Must be a valid email address')
         .isLength({ max: 255 })
         .withMessage('Email address is too long'),
     body('emailConfirm')
-        .trim()
-        .normalizeEmail()  // ← Add this to match the email normalization
         .custom((value, { req }) => {
-            // Get the normalized/trimmed email from the sanitized body
             return value === req.body.email;
         })
         .withMessage('Email addresses must match'),

@@ -24,11 +24,30 @@
                             </div>
                         </div>
                         <hr>
-                        <div class="task-list-link">
-                            <p><a>Click to View Name's Tasks</a><i class="bi bi-caret-right-fill"></i></p>
+                        <div class="task-list-link" onclick="toggleMemberTasks(<%= member.user_id %>)" style="cursor:pointer;">
+                            <p><a>Click to View <%= member.name %>'s Tasks</a><i class="bi bi-caret-right-fill" id="arrow-<%= member.user_id %>"></i></p>
+                        </div>
+                        <div class="members-tasks" id="tasks-<%= member.user_id %>" style="display:none;">
+                            <div class="task-list">
+                                <% const memberTasks = tasks.filter(task => task.assigned_to === member.user_id); %>
+                                <% if (memberTasks.length === 0) { %>
+                                    <p class="no-tasks">No tasks assigned.</p>
+                                <% } else { %>
+                                    <% memberTasks.forEach(task => { %>
+                                        <div class="task-card category-<%= task.category.toLowerCase() %>">
+                                            <div class="task-card-top">
+                                                <div class="task-card-info">
+                                                    <p><strong class="task-title"><%= task.title %></strong> <span class='task-category-tag'><%= task.category %></span> <span class="status">Active</span></p>
+                                                </div>
+                                            </div>
+                                            <p><%= task.description %></p>
+                                            <p>Created by: <%= task.assigner_name %></p>
+                                        </div>
+                                    <% }) %>
+                                <% } %>
+                            </div>
                         </div>
                     </div>
-
                 <% }) %>
             </div>
         </div>
@@ -51,15 +70,46 @@
                                 <p>Completed</p>
                             </div>
                         </div>
-
                         <hr>
-                        <div class="task-list-link">
-                            <p><a>Click to View Name's Tasks</a><i class="bi bi-caret-right-fill"></i></p>
+                        <div class="task-list-link" onclick="toggleMemberTasks(<%= member.user_id %>)" style="cursor:pointer;">
+                            <p><a>Click to View <%= member.name %>'s Tasks</a><i class="bi bi-caret-right-fill" id="arrow-<%= member.user_id %>"></i></p>
+                        </div>
+                        <div class="members-tasks" id="tasks-<%= member.user_id %>" style="display:none;">
+                            <div class="task-list">
+                                <% const childTasks = tasks.filter(task => task.assigned_to === member.user_id); %>
+                                <% if (childTasks.length === 0) { %>
+                                    <p class="no-tasks">No tasks assigned.</p>
+                                <% } else { %>
+                                    <% childTasks.forEach(task => { %>
+                                        <div class="task-card category-<%= task.category.toLowerCase() %>">
+                                            <div class="task-card-top">
+                                                <div class="task-card-info">
+                                                    <p><strong class="task-title"><%= task.title %></strong> <span class='task-category-tag'><%= task.category %></span> <span class="status">Active</span></p>
+                                                </div>
+                                            </div>
+                                            <p><%= task.description %></p>
+                                            <p>Created by: <%= task.assigner_name %></p>
+                                        </div>
+                                    <% }) %>
+                                <% } %>
+                            </div>
                         </div>
                     </div>
-
                 <% }) %>
             </div>
         </div>
     </main>
+    <script>
+        function toggleMemberTasks(userId) {
+            console.log('userId:', userId);
+            console.log('looking for:', `tasks-${userId}`);
+            console.log('found:', document.getElementById(`tasks-${userId}`));
+            const taskList = document.getElementById(`tasks-${userId}`);
+            const arrow = document.getElementById(`arrow-${userId}`);
+            const isHidden = taskList.style.display === 'none';
+            taskList.style.display = isHidden ? 'block' : 'none';
+            arrow.style.transform = isHidden ? 'rotate(90deg)' : '';
+            arrow.style.transition = 'transform 0.2s ease';
+        }
+    </script>
 <%- include('../partials/footer') %>

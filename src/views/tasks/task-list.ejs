@@ -1,35 +1,162 @@
 <%- include('../partials/header') %>
-
-    <main>
-        <div class="task-layout">
-            <div class="pending-task">
-                <h3><i class="bi bi-mailbox-flag"></i> Pending Requests (1)</h3>
-                <p>Tasks assigned to you waiting for acceptance</p>
-
-                <%- include('../partials/messages') %>
-
-            </div>
-
-            <div class="home-section">
-                <h3>My Tasks</h3>
-                <p>Manage your personal and accepted tasks.</p>
-                <div class="task-types">
-                    <button class="active">Active</button>
-                    <button>Completed</button>
-                    <button>Delegated</button>
-                </div>
-                
-            </div>
+<main>
+    <div class="task-layout">
+        <div class="pending-task">
+            <h3><i class="bi bi-mailbox-flag"></i> Pending Requests (<%= pendingTasks.length %>)</h3>
+            <p>Tasks assigned to you waiting for acceptance</p>
+            <% if (pendingTasks.length === 0) { %>
+                <p class="no-tasks">No pending requests.</p>
+            <% } else { %>
+                <% pendingTasks.forEach(task => { %>
+                    <div class="task-card category-<%= task.category.toLowerCase() %>">
+                        <div class="task-card-top">
+                            <div class="task-card-info">
+                                <p><strong class="task-title"><%= task.title %></strong>
+                                <span class="task-category-tag"><%= task.category %></span>
+                                <span class="status">Pending</span></p>
+                                <p><%= task.description %></p>
+                                <p>Created by: <%= task.assigner_name %></p>
+                            </div>
+                            <div class="task-actions">
+                                <form method="POST" action="/tasks/<%= task.task_id %>/accept">
+                                    <input type="hidden" name="redirect" value="/">
+                                    <button type="submit">Accept</button>
+                                </form>
+                                <form method="POST" action="/tasks/<%= task.task_id %>/deny">
+                                    <input type="hidden" name="redirect" value="/">
+                                    <button type="submit" class="btn-deny">Deny</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } %>
         </div>
-    </main>
-    <script>
-        const taskTypeButtons = document.querySelectorAll('.task-types button');
-        
-        taskTypeButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                taskTypeButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-            });
+
+        <div class="home-section">
+            <h3>My Tasks</h3>
+            <p>Manage your personal and accepted tasks.</p>
+            <div class="task-types">
+                <button class="active">Active</button>
+                <button>Completed</button>
+                <button>Delegated</button>
+            </div>
+
+            <div class="task-list" id="active-tasks">
+                <% activeTasks.forEach(task => { %>
+                    <div class="task-card category-<%= task.category.toLowerCase() %>">
+                        <div class="task-card-top">
+                            <div class="task-card-info">
+                                <p>
+                                    <strong class="task-title"><%= task.title %></strong>
+                                    <span class="task-category-tag"><%= task.category %></span>
+                                    <span class="status">Active</span>
+                                </p>
+                                <p><%= task.description %></p>
+                                <p>Created by: <%= task.assigner_name %></p>
+                                <% if (task.due_date) { %>
+                                    <p>Due: <%= new Date(task.due_date).toLocaleDateString() %></p>
+                                <% } %>
+                            </div>
+                            <div class="task-actions">
+                                <form method="POST" action="/tasks/<%= task.task_id %>/complete">
+                                    <button type="submit">Complete</button>
+                                </form>
+                                <button class="btn-edit" onclick="toggleEdit(<%= task.task_id %>)">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <form method="POST" action="/tasks/<%= task.task_id %>/delete">
+                                    <button type="submit" class="btn-delete"><i class="bi bi-trash"></i></button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="edit-form" id="edit-<%= task.task_id %>" style="display:none;">
+                            <form method="POST" action="/tasks/<%= task.task_id %>/edit">
+                                <div class="form-group">
+                                    <label>Title</label>
+                                    <input type="text" name="title" value="<%= task.title %>" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    <input type="text" name="description" value="<%= task.description %>">
+                                </div>
+                                <div class="form-group">
+                                    <label>Due Date</label>
+                                    <input type="date" name="due_date" value="<%= task.due_date ? task.due_date.toISOString().split('T')[0] : '' %>">
+                                </div>
+                                <div class="form-group">
+                                    <label>Category</label>
+                                    <select name="category">
+                                        <option value="chores" <%= task.category==='chores'?'selected':'' %>>Chores</option>
+                                        <option value="homework" <%= task.category==='homework'?'selected':'' %>>Homework</option>
+                                        <option value="errands" <%= task.category==='errands'?'selected':'' %>>Errands</option>
+                                        <option value="personal" <%= task.category==='personal'?'selected':'' %>>Personal</option>
+                                        <option value="other" <%= task.category==='other'?'selected':'' %>>Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Reassign To</label>
+                                    <select name="assigned_to">
+                                        <% users.forEach(member => { %>
+                                            <option value="<%= member.user_id %>" <%= task.assigned_to===member.user_id?'selected':'' %>>
+                                                <%= member.name %>
+                                            </option>
+                                        <% }) %>
+                                    </select>
+                                </div>
+                                <div class="task-actions">
+                                    <button type="submit">Save</button>
+                                    <button type="button" onclick="toggleEdit(<%= task.task_id %>)">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+
+            <div class="task-list" id="completed-tasks" style="display:none;">
+                <% completedTasks.forEach(task => { %>
+                    <div class="task-card category-<%= task.category.toLowerCase() %>" style="opacity: 0.6;">
+                        <div class="task-card-top">
+                            <div class="task-card-info">
+                                <p>
+                                    <strong class="task-title" style="text-decoration: line-through;"><%= task.title %></strong>
+                                    <span class="task-category-tag"><%= task.category %></span>
+                                    <span class="status">Completed</span>
+                                </p>
+                            </div>
+                            <div class="task-actions">
+                                <form method="POST" action="/tasks/<%= task.task_id %>/delete">
+                                    <button type="submit" class="btn-delete"><i class="bi bi-trash"></i></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+
+        </div><!-- end home-section -->
+    </div><!-- end task-layout -->
+</main>
+
+<script>
+    const taskTypeButtons = document.querySelectorAll('.task-types button');
+    const activeTasks = document.getElementById('active-tasks');
+    const completedTasks = document.getElementById('completed-tasks');
+
+    taskTypeButtons.forEach((button, index) => {
+        button.addEventListener('click', () => {
+            taskTypeButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            activeTasks.style.display = index === 0 ? 'flex' : 'none';
+            completedTasks.style.display = index === 1 ? 'flex' : 'none';
         });
-    </script>
-    <%- include('../partials/footer') %>
+    });
+
+    function toggleEdit(taskId) {
+        const form = document.getElementById(`edit-${taskId}`);
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    }
+</script>
+<%- include('../partials/footer') %>

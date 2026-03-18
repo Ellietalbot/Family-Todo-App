@@ -6,12 +6,14 @@ import flash from 'connect-flash';
 import { setupDatabase, testConnection } from './src/models/setup.js';
 import registrationRouter from './src/controllers/registration.js';
 import loginRouter from './src/controllers/login.js';
+import dashboardRouter from './src/controllers/dashboard.js';
+import taskRouter from './src/controllers/tasks.js';
 import { processLogout } from './src/controllers/login.js';
 import { requireLogin } from './src/middleware/auth.js';
 import { returnFamilyMembers } from './src/controllers/family.js';
 import { startSessionCleanup } from './src/utils/session-cleanup.js';
 import { addLocalVariables } from './src/middleware/global.js';
-
+console.log(process.env.NODE_ENV)
 console.log('SESSION_SECRET loaded:', !!process.env.SESSION_SECRET);
 const app = express();
 
@@ -60,20 +62,14 @@ app.set('views', './src/views');
 app.use(express.static('./src/public'));
 
 
-app.get('/', requireLogin, (req, res) => {
-    const title = 'Dashboard';
-    res.render('dashboard/dashboard', { title });
-});
 app.get('/family', requireLogin, returnFamilyMembers);
-app.get('/tasks', requireLogin, (req, res) => {
-    const title = 'Tasks';
-    res.render('tasks/task-list', { title });
-});
 
 app.post('/logout', processLogout);
 
 app.use('/login', loginRouter);
 app.use('/register', registrationRouter);
+app.use('/', dashboardRouter); 
+app.use('/tasks', taskRouter);
 
 const PORT = 3000;
 
