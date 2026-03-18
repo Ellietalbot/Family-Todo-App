@@ -13,6 +13,7 @@ import { requireLogin } from './src/middleware/auth.js';
 import { returnFamilyMembers } from './src/controllers/family.js';
 import { startSessionCleanup } from './src/utils/session-cleanup.js';
 import { addLocalVariables } from './src/middleware/global.js';
+import setupRouter from './src/controllers/modal.js';
 console.log(process.env.NODE_ENV)
 console.log('SESSION_SECRET loaded:', !!process.env.SESSION_SECRET);
 const app = express();
@@ -68,8 +69,10 @@ app.post('/logout', processLogout);
 
 app.use('/login', loginRouter);
 app.use('/register', registrationRouter);
+app.use('/setup', setupRouter);
 app.use('/', dashboardRouter); 
 app.use('/tasks', taskRouter);
+
 
 const PORT = 3000;
 

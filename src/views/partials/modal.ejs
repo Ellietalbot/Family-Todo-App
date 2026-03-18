@@ -1,0 +1,28 @@
+<%- include('../partials/header') %>
+<main class="modal-page">
+    <div class="modal">
+        <div class="setup-page">
+            <img class="role-image" id="role-image" src="/images/parent-image.png">
+            <form method="POST" action="/setup">
+                <input type="hidden" name="role" id="role-input" value="parent">
+                <div class="task-types">
+                    <button type="button" class="parent-button active" onclick="selectRole('parent')">I am a Parent</button>
+                    <button type="button" class="child-button" onclick="selectRole('child')">I am a Child</button>
+                </div>
+                <button type="submit" class="submit-button">Next</button>
+            </form>
+        </div>
+    </div>
+</main>
+<script>
+    function selectRole(role) {
+        document.getElementById('role-input').value = role;
+        document.getElementById('role-image').src = role === 'parent' 
+            ? '/images/parent-image.png' 
+            : '/images/child-image.png';
+
+        document.querySelector('.parent-button').classList.toggle('active', role === 'parent');
+        document.querySelector('.child-button').classList.toggle('active', role === 'child');
+    }
+</script>
+<%- include('../partials/footer') %>

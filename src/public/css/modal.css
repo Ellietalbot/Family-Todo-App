@@ -1,0 +1,29 @@
+main.modal-page {
+    display: flex;
+    justify-content: center;
+}
+.setup-page{
+    background-color: white;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+    align-items: center;
+    gap:20px;
+    width: 600px;
+}
+.role-image{
+    max-width: 300px;
+    border-radius: 200px;
+    border: 2px solid #e87c58;
+}
+h3{
+    color: #e87c58;
+}
+button{
+    width: 100%;
+}
+.task-types{
+    width: 100%;
+    justify-self: center;
+}

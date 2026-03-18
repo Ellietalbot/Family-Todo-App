@@ -11,7 +11,6 @@ const showRegistrationForm = (req, res) => {
     res.render('registration/form', { title: 'User Registration' });
 };
 
-// In registration controller - replace processRegistration with this
 const processRegistration = async (req, res) => { 
     
     const errors = validationResult(req);
@@ -38,7 +37,7 @@ const processRegistration = async (req, res) => {
             const family = await createFamily(req.body.family_name, inviteCode);
             await saveUser(name, email, hashedPassword, 'parent', family.family_id);
             req.flash('success', `Family created! Your invite code is: ${inviteCode} — share this with your family.`);
-            return res.redirect('/login');
+            return res.redirect('/setup');
         }
 
         if (familyAction === 'join') {
@@ -49,7 +48,7 @@ const processRegistration = async (req, res) => {
             }
             await saveUser(name, email, hashedPassword, 'child', family.family_id);
             req.flash('success', 'Registration successful! Please log in.');
-            return res.redirect('/login');
+            return res.redirect('/setup');
         }
         req.flash('error', 'Please select whether you are creating or joining a family.');
         return res.redirect('/register');
@@ -81,7 +80,7 @@ const processDeleteAccount = async (req, res) => {
     const targetUserId = parseInt(req.params.id);
     const currentUser = req.session.user;
 
-    if (currentUser.role !== 'admin') {  // was roleName
+    if (currentUser.role !== 'admin') {
         req.flash('error', 'You do not have permission to delete accounts.');
         return res.redirect('/admin/manage-users');
     }
