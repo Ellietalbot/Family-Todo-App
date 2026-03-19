@@ -35,19 +35,21 @@ const processRegistration = async (req, res) => {
         if (familyAction === 'create') {
             const inviteCode = await generateUniqueInviteCode(req.body.family_name);
             const family = await createFamily(req.body.family_name, inviteCode);
-            await saveUser(name, email, hashedPassword, 'parent', family.family_id);
-            req.flash('success', `Family created! Your invite code is: ${inviteCode} — share this with your family.`);
+            const newUser = await saveUser(name, email, hashedPassword, 'parent', family.family_id);
+            req.session.user = { user_id: newUser.user_id, name, email, role: 'parent', family_id: family.family_id };
+            req.flash('success', `Family created! Your invite code is: ${inviteCode}`);
             return res.redirect('/setup');
         }
 
         if (familyAction === 'join') {
             const family = await findFamilyByInviteCode(req.body.invite_code);
             if (!family) {
-                req.flash('error', 'Invalid invite code. Please check with your family.');
+                req.flash('error', 'Invalid invite code.');
                 return res.redirect('/register');
             }
-            await saveUser(name, email, hashedPassword, 'child', family.family_id);
-            req.flash('success', 'Registration successful! Please log in.');
+            const newUser = await saveUser(name, email, hashedPassword, 'child', family.family_id);
+            req.session.user = { user_id: newUser.user_id, name, email, role: 'child', family_id: family.family_id };
+            req.flash('success', 'Registration successful!');
             return res.redirect('/setup');
         }
         req.flash('error', 'Please select whether you are creating or joining a family.');

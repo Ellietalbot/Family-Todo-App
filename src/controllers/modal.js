@@ -9,6 +9,8 @@ const showModal = (req, res) => {
 };
 
 const processModal = async (req, res) => {
+    console.log('Full req.body:', JSON.stringify(req.body));
+    console.log('req.body:', req.body);
     const user_id = req.session.user.user_id;
     const { role } = req.body;
 
@@ -20,6 +22,7 @@ const processModal = async (req, res) => {
     } catch (error){
         console.error("Error with Setup", error)
         req.flash('success', 'Setup complete');
+        console.log('User logged in:', req.session.user);
         return res.redirect('/');
     }
 

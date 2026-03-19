@@ -16,7 +16,7 @@ const showDashboard = async (req, res) => {
             returnFamilyMemberInfo(familyId)
         ]);
 
-        const tasks = allTasks.filter(t => t.status !== 'completed' && t.assigned_to == user_id);
+        const tasks = allTasks.filter(t => t.status === 'active');
         const completedTasks = allTasks.filter(t => t.status === 'completed');
 
         return res.render('dashboard/dashboard', {

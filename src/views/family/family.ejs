@@ -1,7 +1,7 @@
 <%- include('../partials/header') %>
     <main class="family-main">
         <div class="family-head">
-            <h3><%= family.family_name %> Family</h3>
+            <h3 class="greeting"><%= family.family_name %> Family</h3>
             <p>Family Join Code: <%= family.invite_code %></p>
         </div>
         <div class="person-section">
@@ -13,7 +13,9 @@
                 <% users.filter(member => member.role === 'parent').forEach(member => { %>
                     <div class="home-section">
                         <div class="person-heading">
-                            <img class="profile-pic" src="/images/mom-profile-pic.jpg" alt="profile picture">
+                        <div class="profile-icon" data-name="<%=member.name%>">
+                            <span><%=member.name.charAt(0)%></span>
+                        </div>
                             <div class="person-title">
                                 <h3><%=member.name%></h3>
                                 <p><i class="bi bi-person"></i><%=member.role%></p>
@@ -60,7 +62,9 @@
                 <% users.filter(member => member.role === 'child').forEach(member => { %>
                     <div class="home-section">
                         <div class="person-heading">
-                            <img class="profile-pic" src="/images/mom-profile-pic.jpg" alt="profile picture">
+                            <div class="profile-icon" data-name="<%=member.name%>">
+                                <span><%=member.name.charAt(0)%></span>
+                            </div>
                             <div class="person-title">
                                 <h3><%=member.name%></h3>
                                 <p><i class="bi bi-person"></i><%=member.role%></p>
@@ -100,10 +104,24 @@
         </div>
     </main>
     <script>
+        const avatarColors = [
+            { bg: '#B5D4F4', text: '#0C447C' },
+            { bg: '#9FE1CB', text: '#085041' },
+            { bg: '#F5C4B3', text: '#712B13' }, 
+            { bg: '#F4C0D1', text: '#72243E' }, 
+            { bg: '#C0DD97', text: '#27500A' }, 
+            { bg: '#FAC775', text: '#633806' }, 
+            { bg: '#CECBF6', text: '#3C3489' }, 
+        ];
+
+        document.querySelectorAll('.profile-icon').forEach(icon => {
+            const name = icon.dataset.name;
+            const index = name.charCodeAt(0) % avatarColors.length;
+            const color = avatarColors[index];
+            icon.style.backgroundColor = color.bg;
+            icon.style.color = color.text;
+        });
         function toggleMemberTasks(userId) {
-            console.log('userId:', userId);
-            console.log('looking for:', `tasks-${userId}`);
-            console.log('found:', document.getElementById(`tasks-${userId}`));
             const taskList = document.getElementById(`tasks-${userId}`);
             const arrow = document.getElementById(`arrow-${userId}`);
             const isHidden = taskList.style.display === 'none';

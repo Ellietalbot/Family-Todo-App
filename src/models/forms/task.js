@@ -13,7 +13,7 @@ const getTaskByUserId = async (user_id) => {
         SELECT task.*, users.name AS assigner_name 
         FROM task 
         JOIN users ON task.created_by = users.user_id 
-        WHERE task.assigned_to = $1`;
+        WHERE task.assigned_to = $1 AND task.status != 'pending'`;
     const result = await db.query(query, [user_id]);
     return result.rows;
 };
@@ -23,11 +23,10 @@ const getAllTasksByFamily = async (family_id) => {
         SELECT task.*, users.name AS assigner_name 
         FROM task 
         JOIN users ON task.created_by = users.user_id 
-        WHERE task.family_id = $1`;
+        WHERE task.family_id = $1 AND task.status != 'pending'`;
     const result = await db.query(query, [family_id]);
     return result.rows;
 };
-
 const deleteTask = async (taskId) => {
     const query = `DELETE FROM task WHERE task_id = $1 RETURNING task_id`;
     const result = await db.query(query, [taskId]);

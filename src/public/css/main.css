@@ -304,3 +304,7 @@ input:hover {
     border-color: #17a2b8;
     color: #0c5460;
 }
+.greeting{
+    font-size:50px;
+    justify-self: center;
+}
