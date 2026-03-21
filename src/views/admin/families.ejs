@@ -1,0 +1,51 @@
+<%- include('../partials/header') %>
+<main>
+    <div class="home-section">
+        <h3>Manage Families</h3>
+        <form method="POST" action="/admin/families">
+            <input type="text" name="familyName" placeholder="Family name" required>
+            <button type="submit">Add Family</button>
+        </form>
+
+
+        <% families.forEach(family => { %>
+            <div class="family-card-top">
+                <div class="family-card-info">
+                    <p>
+                        <strong class="family-name"><%= family.family_name %></strong>
+                        <span class="family-invite-code"><%= family.invite_code %></span>
+                        <span class="family-created-at"><%= family.created_at %></span>
+                    </p>
+                </div>
+                <div class="admin-actions">
+                    <button class="btn-edit" onclick="toggleEdit(<%= family.family_id %>)">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                    <form method="POST" action="/admin/families/<%= family.family_id %>/delete">
+                        <button type="submit" class="btn-delete">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+            <div class="edit-family" id="edit-<%= family.family_id %>" style="display:none;">
+                <form method="POST" action="/admin/families/<%= family.family_id %>/edit">
+                    <div class="form-group">
+                        <label>Family Name</label>
+                        <input type="text" name="familyName" value="<%= family.family_name %>" required>
+                    </div>
+                    <button type="submit">Save</button>
+                    <button type="button" onclick="toggleEdit(<%= family.family_id %>)">Cancel</button>
+                </form>
+            </div>
+        <% }) %>
+    </div>
+    <script>
+        function toggleEdit(id) {
+            const form = document.getElementById(`edit-${id}`);
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        }
+    </script>
+</main>
+<%- include('../partials/footer') %>

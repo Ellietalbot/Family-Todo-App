@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { body, validationResult } from 'express-validator';
 import bcrypt from 'bcrypt';
-import { emailExists, saveUser, getAllUsers, deleteUser, generateUniqueInviteCode, findFamilyByInviteCode, createFamily } from '../models/forms/registration.js'; // Fix 1: corrected path (was ../../), added deleteUser
+import { emailExists, saveUser, deleteUser, generateUniqueInviteCode, findFamilyByInviteCode, createFamily } from '../models/forms/registration.js';
 import { requireLogin, requireRole } from '../middleware/auth.js';
 import { registrationValidation } from '../middleware/forms/validation.js';
 const router = Router();

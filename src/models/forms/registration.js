@@ -21,12 +21,7 @@ const saveUser = async (name, email, hashedPassword, role, familyId) => {
     return result.rows[0];
 };
 
-// @returns {Promise<Array>}
-const getAllUsers = async () => {
-    const query = `SELECT user_id, name, email, created_at FROM users ORDER BY created_at DESC`;
-    const result = await db.query(query);
-    return result.rows;
-};
+
 
 // @param {number} userId
 // @returns {Promise<Boolean>}
@@ -77,4 +72,4 @@ const findFamilyByInviteCode = async (inviteCode) => {
     return result.rows[0] || null;
 };
 
-export { emailExists, saveUser, getAllUsers, deleteUser, generateUniqueInviteCode, findFamilyByInviteCode, createFamily };
+export { emailExists, saveUser, deleteUser, generateUniqueInviteCode, findFamilyByInviteCode, createFamily };

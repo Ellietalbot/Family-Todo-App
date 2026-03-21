@@ -1,0 +1,66 @@
+<%- include('../partials/header') %>
+<main>
+    <div class="quick-stats">
+        <div class ="quick-stat-card">
+            <p>Family Count</p>
+            <h3><%=familyCount.count%></h3>
+        </div>
+        <div class ="quick-stat-card">
+            <p>Users Count</p>
+            <h3><%=userCount.count%></h3>
+        </div>
+        <div class="quick-stat-card">
+            <p>Average Family Size</p>
+            <h3><%= Math.round(AverageSize.avg) %></h3>
+        </div>
+        <div class="quick-stat-card">
+            <p>Total Tasks</p>
+            <h3><%=taskTotal.count%></h3>
+        </div>
+    </div>
+    <section>
+        <h2>Recent Activity</h2>
+        <table>
+            <thead>    
+                <tr>
+                    <th>Task</th>
+                    <th>Changed By</th>
+                    <th>Created At</th>
+                    <th>Changed At</th>
+                </tr>
+            </thead>
+            <tbody>
+            <% recentTaskActivity.forEach(activity => { %>
+                <tr>
+                    <td><%= activity.title%></td>
+                    <td><%= activity.name%></td>
+                    <td><%= activity.created_at%></td>
+                    <td><%= activity.changed_at%></td>
+                </tr>
+            <% }) %>
+            </tbody>
+        </table>
+        </section>
+        <section> 
+            <h2>All Families</h2>
+            <table>
+                <thead>    
+                    <tr>
+                        <th>Family Name</th>
+                        <th>Invite Code</th>
+                        <th>Created At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <% allFamilies.forEach(family => { %>
+                    <tr>
+                        <td><%= family.family_name%></td>
+                        <td><%= family.invite_code%></td>
+                        <td><%= new Date(family.created_at).toLocaleDateString() %></td>
+                    </tr>
+                <% }) %>
+                </tbody>
+            </table>
+        </section>
+</main>
+<%- include('../partials/footer') %>

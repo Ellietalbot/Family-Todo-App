@@ -8,8 +8,9 @@ import registrationRouter from './src/controllers/registration.js';
 import loginRouter from './src/controllers/login.js';
 import dashboardRouter from './src/controllers/dashboard.js';
 import taskRouter from './src/controllers/tasks.js';
+import adminRouter from './src/controllers/admin.js';
 import { processLogout } from './src/controllers/login.js';
-import { requireLogin } from './src/middleware/auth.js';
+import { requireLogin, requireRole } from './src/middleware/auth.js';
 import { returnFamilyMembers } from './src/controllers/family.js';
 import { startSessionCleanup } from './src/utils/session-cleanup.js';
 import { addLocalVariables } from './src/middleware/global.js';
@@ -72,6 +73,7 @@ app.use('/register', registrationRouter);
 app.use('/setup', setupRouter);
 app.use('/', dashboardRouter); 
 app.use('/tasks', taskRouter);
+app.use('/admin', adminRouter)
 
 
 const PORT = 3000;

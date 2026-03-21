@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { requireLogin } from '../middleware/auth.js';
+import { requireLogin, requireParent } from '../middleware/auth.js';
 import { getTaskByUserId, getTasksCreatedByUser } from '../models/forms/task.js';
 import { returnFamilyMemberInfo } from '../models/family.js';
 import { processTask } from './tasks.js';
@@ -39,7 +39,7 @@ const showDashboard = async (req, res) => {
         });
     }
 };
-router.get('/', requireLogin, showDashboard);
+router.get('/', requireLogin, requireParent, showDashboard);
 router.post('/', requireLogin, processTask);
 
 export default router;

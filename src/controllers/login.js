@@ -30,13 +30,13 @@ const processLogin = async (req, res) => {
     try {
 
         const user = await findUserByEmail(email);
-
         if(!user){
             req.flash('error', 'Invalid email or password')
             return res.redirect('/login');
         }
 
         const passwordIsValid = await verifyPassword(password, user.password_hash);
+
 
         if(!passwordIsValid){
             req.flash('error', 'Invalid email or password')
@@ -45,10 +45,16 @@ const processLogin = async (req, res) => {
 
 
         delete user.password_hash;
-        req.flash('success', 'Successfully logged in')
-        console.log('User logged in:', req.session.user);
         req.session.user = user;
-        return res.redirect('/')
+        req.session.save((err) => {
+            if (err) {
+                console.error('Session save error:', err);
+                return res.redirect('/login');
+            }
+            req.flash('success', 'Successfully logged in');
+            const redirectTo = user.role === 'admin' ? '/admin' : '/';
+            return res.redirect(redirectTo);
+        });
         
     } catch (error) {
         console.error("Error during login:", error)

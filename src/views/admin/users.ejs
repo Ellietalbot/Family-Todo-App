@@ -1,0 +1,71 @@
+<%- include('../partials/header') %>
+<main>
+    
+    <div class="home-section">
+        <h3>All Users</h3>
+        <p>Manage all users.</p>
+
+        <% users.forEach(user => { %>
+            <div class="user-card-top">
+                <div class="user-card-info">
+                    <p>
+                        <strong class="user-name"><%= user.name %></strong>
+                        <span class="user-email"><%= user.email %></span>
+                        <span class="user-role"><%= user.role %></span>
+                        <span class="user-created-at"><%= user.created_at %></span>
+                    </p>
+                </div>
+                <div class="admin-actions">
+                    <button class="btn-edit" onclick="toggleEdit(<%= user.user_id %>)">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                    <form method="POST" action="/admin/users/<%= user.user_id %>/delete">
+                        <button type="submit" class="btn-delete">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+
+            <div class="edit-user" id="edit-<%= user.user_id %>" style="display:none;">
+                <form method="POST" action="/admin/users/<%= user.user_id %>/role">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" name="name" value="<%= user.name %>" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="text" name="email" value="<%= user.email %>">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Role</label>
+                        <select name="role">
+                            <option value="admin" <%= user.role==='admin'?'selected':'' %>>Admin</option>
+                            <option value="parent" <%= user.role==='parent'?'selected':'' %>>Parent</option>
+                            <option value="child" <%= user.role==='child'?'selected':'' %>>Child</option>
+                        </select>
+                    </div>
+                    <div class="task-actions">
+                        <button type="submit">Save</button>
+                        <button type="button" onclick="toggleEdit(<%= user.user_id %>)">Cancel</button>
+                    </div>
+                </form>
+            </div>
+
+        <% }) %>
+    </div>
+
+
+
+</main>
+
+<script>
+    function toggleEdit(taskId) {
+        const form = document.getElementById(`edit-${taskId}`);
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    }
+</script>
+<%- include('../partials/footer') %>
