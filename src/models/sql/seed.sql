@@ -24,26 +24,26 @@ CREATE TABLE users (
     role role_enum,
     created_at DATE DEFAULT NOW(),
     password_hash TEXT,
-    family_id INT REFERENCES family(family_id)
+    family_id INT REFERENCES family(family_id) ON DELETE SET NULL
 );
 
 CREATE TABLE task (
     task_id SERIAL PRIMARY KEY NOT NULL,
     title VARCHAR(255),
     description TEXT,
-    created_by INT REFERENCES users(user_id),
-    assigned_to INT REFERENCES users(user_id),
+    created_by INT REFERENCES users(user_id) ON DELETE SET NULL,
+    assigned_to INT REFERENCES users(user_id) ON DELETE SET NULL,
     status status_enum DEFAULT 'active',
     category category_enum,
     created_at DATE DEFAULT NOW(),
     due_date DATE,
-    family_id INT REFERENCES family(family_id)
+    family_id INT REFERENCES family(family_id) ON DELETE SET NULL
 );
 
 CREATE TABLE task_history (
     history_id SERIAL PRIMARY KEY NOT NULL,
-    task_id INT REFERENCES task(task_id),
-    changed_by INT REFERENCES users(user_id),
+    task_id INT REFERENCES task(task_id) ON DELETE SET NULL,
+    changed_by INT REFERENCES users(user_id) ON DELETE SET NULL,
     changed_at DATE DEFAULT NOW(),
     old_status VARCHAR(50),
     new_status status_enum
@@ -51,8 +51,8 @@ CREATE TABLE task_history (
 
 CREATE TABLE comments (
     comment_id SERIAL PRIMARY KEY NOT NULL,
-    task_id INT REFERENCES task(task_id),
-    user_id INT REFERENCES users(user_id),
+    task_id INT REFERENCES task(task_id) ON DELETE SET NULL,
+    user_id INT REFERENCES users(user_id) ON DELETE SET NULL,
     content TEXT,
     created_at DATE DEFAULT NOW()
 );
