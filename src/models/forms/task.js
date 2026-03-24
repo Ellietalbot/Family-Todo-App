@@ -8,6 +8,12 @@ const saveTask = async (title, description, due_date, category, assigned_to, cre
     return result.rows[0];
 };
 
+const logTaskHistory = async (task_id, changed_by, old_status, new_status) => {
+    const query = `INSERT INTO task_history (task_id, changed_by, old_status, new_status) 
+                   VALUES ($1, $2, $3, $4)`;
+    await db.query(query, [task_id, changed_by, old_status, new_status]);
+};
+
 const getTaskByUserId = async (user_id) => {
     const query = `
         SELECT task.*, users.name AS assigner_name 
@@ -27,6 +33,7 @@ const getAllTasksByFamily = async (family_id) => {
     const result = await db.query(query, [family_id]);
     return result.rows;
 };
+
 const deleteTask = async (taskId) => {
     const query = `DELETE FROM task WHERE task_id = $1 RETURNING task_id`;
     const result = await db.query(query, [taskId]);
@@ -37,7 +44,8 @@ const getTaskAssigner = async (taskId) => {
     const query = `SELECT users.name FROM users JOIN task ON task.created_by = users.user_id WHERE task.task_id = $1`;
     const result = await db.query(query, [taskId]);
     return result.rows[0];
-}
+};
+
 const updateTask = async (taskId, title, description, due_date, category, assigned_to) => {
     const query = `
         UPDATE task SET title=$1, description=$2, due_date=$3, category=$4, assigned_to=$5
@@ -46,25 +54,37 @@ const updateTask = async (taskId, title, description, due_date, category, assign
     const result = await db.query(query, [title, description, due_date, category, assigned_to, taskId]);
     return result.rows[0];
 };
-const acceptTask = async (taskId) => {
+
+const acceptTask = async (taskId, userId) => {
+    const current = await db.query(`SELECT status FROM task WHERE task_id = $1`, [taskId]);
+    const old_status = current.rows[0]?.status;
+
     const query = `UPDATE task SET status='active' WHERE task_id=$1 RETURNING *`;
     const result = await db.query(query, [taskId]);
+
+    await logTaskHistory(taskId, userId, old_status, 'active');
     return result.rows[0];
 };
 
-const denyTask = async (taskId) => {
-    // Reassign back to creator and set active
-    const query = `
-        UPDATE task SET assigned_to=created_by, status='active' 
-        WHERE task_id=$1 RETURNING *`;
+const denyTask = async (taskId, userId) => {
+    const current = await db.query(`SELECT status FROM task WHERE task_id = $1`, [taskId]);
+    const old_status = current.rows[0]?.status;
+
+    const query = `UPDATE task SET assigned_to=created_by, status='active' WHERE task_id=$1 RETURNING *`;
     const result = await db.query(query, [taskId]);
+
+    await logTaskHistory(taskId, userId, old_status, 'active');
     return result.rows[0];
 };
 
+const completeTask = async (taskId, userId) => {
+    const current = await db.query(`SELECT status FROM task WHERE task_id = $1`, [taskId]);
+    const old_status = current.rows[0]?.status;
 
-const completeTask = async (taskId) => {
     const query = `UPDATE task SET status='completed' WHERE task_id=$1 RETURNING *`;
     const result = await db.query(query, [taskId]);
+
+    await logTaskHistory(taskId, userId, old_status, 'completed');
     return result.rows[0];
 };
 
@@ -80,6 +100,7 @@ const getTasksCreatedByUser = async (user_id) => {
     const result = await db.query(query, [user_id]);
     return result.rows;
 };
+
 const getPendingTasksForUser = async (user_id) => {
     const query = `
         SELECT task.*, 
@@ -93,5 +114,4 @@ const getPendingTasksForUser = async (user_id) => {
     return result.rows;
 };
 
-export { saveTask, getTaskByUserId, deleteTask, getAllTasksByFamily, getTaskAssigner, updateTask, completeTask, getTasksCreatedByUser, acceptTask, denyTask, getPendingTasksForUser }
-
+export { saveTask, getTaskByUserId, deleteTask, getAllTasksByFamily, getTaskAssigner, updateTask, completeTask, getTasksCreatedByUser, acceptTask, denyTask, getPendingTasksForUser };

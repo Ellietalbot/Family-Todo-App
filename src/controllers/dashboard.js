@@ -5,7 +5,8 @@ import { returnFamilyMemberInfo } from '../models/family.js';
 import { processTask } from './tasks.js';
 
 const router = Router();
-const showDashboard = async (req, res) => {
+
+const showDashboard = async (req, res, next) => {
     const user_id = req.session.user.user_id;
     const familyId = req.session.user.family_id;
 
@@ -28,17 +29,10 @@ const showDashboard = async (req, res) => {
             delegatedTasks
         });
     } catch (error) {
-        console.error('Error loading dashboard:', error);
-        return res.render('dashboard/dashboard', {
-            title: 'Dashboard',
-            users: [],
-            currentUser: req.session.user,
-            tasks: [],
-            completedTasks: [],
-            delegatedTasks: []
-        });
+        next(error);
     }
 };
+
 router.get('/', requireLogin, requireParent, showDashboard);
 router.post('/', requireLogin, processTask);
 

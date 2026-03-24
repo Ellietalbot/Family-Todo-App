@@ -4,7 +4,8 @@ import { countFamilies, countUsers, averageFamilySize, totalTasks, recentActivit
 import { deleteUser, createFamily, generateUniqueInviteCode } from '../models/forms/registration.js';
 
 const router = Router();
-const showAdminDashboard = async (req, res) => {
+
+const showAdminDashboard = async (req, res, next) => {
     try {
         const [familyCount, userCount, AverageSize, taskTotal, recentTaskActivity, allFamilies] = await Promise.all([
             countFamilies(),
@@ -13,12 +14,11 @@ const showAdminDashboard = async (req, res) => {
             totalTasks(),
             recentActivity(),
             returnAllFamilies(),
-
         ]);
 
         return res.render('admin/admin', {
             title: 'Admin Dashboard',
-            familyCount, 
+            familyCount,
             userCount,
             AverageSize,
             taskTotal,
@@ -26,134 +26,105 @@ const showAdminDashboard = async (req, res) => {
             allFamilies
         });
     } catch (error) {
-        console.error('Error loading admin dashboard:', error);
-        console.error('Full error:', error.message);
-        return res.render('admin/admin', {
-            title: 'Dashboard',
-            users: [],
-            familyCount: 0,
-            userCount: 0,
-            AverageSize: 0,
-            taskTotal: 0,
-            recentTaskActivity: [],
-            allFamilies: []
-        });
+        next(error);
     }
 };
-const showManageUsers = async (req, res) => {
+
+const showManageUsers = async (req, res, next) => {
     try {
         const users = await getAllUsers();
-
         return res.render('admin/users', {
             title: 'Manage Users',
             users
         });
     } catch (error) {
-        console.error('Error loading manage users:', error);
-        console.error('Full error:', error.message);
-        return res.render('admin/users', {
-            title: 'Manage Users',
-            users: []
-        });
+        next(error);
     }
 };
-const processUpdateRole = async (req, res) =>{
+
+const processUpdateRole = async (req, res, next) => {
     const { id } = req.params;
     const { role } = req.body;
-    try{
-        const updateUsersRole = await updateUserRole(role, id);;
+    try {
+        await updateUserRole(role, id);
         req.flash('success', 'Update role successful!');
         res.redirect('/admin/users');
-    } catch (error){
-        console.error('Error updating role:', error);
-        console.error('Full error:', error.message);
-        res.redirect('/admin/users');
+    } catch (error) {
+        next(error);
     }
-}
+};
 
-const processDeleteUser = async (req, res) => {
+const processDeleteUser = async (req, res, next) => {
     const { id } = req.params;
     const currentUser = req.session.user;
-    
-    if (parseInt(id) === currentUser.user_id){
+
+    if (parseInt(id) === currentUser.user_id) {
         req.flash('error', 'You cannot delete your own account.');
         return res.redirect('/admin/users');
     }
     try {
         await deleteUser(id);
-        req.flash('success', '...');
+        req.flash('success', 'User deleted successfully.');
         res.redirect('/admin/users');
     } catch (error) {
-        console.error('Error deleting user:', error);
-        res.redirect('/admin/users');
+        next(error);
     }
 };
 
-const processCreateFamily = async (req, res) => {
+const processCreateFamily = async (req, res, next) => {
     const { familyName } = req.body;
-    const inviteCode = await generateUniqueInviteCode(familyName);
-
-    try{
+    try {
+        const inviteCode = await generateUniqueInviteCode(familyName);
         await createFamily(familyName, inviteCode);
         req.flash('success', `Family created! Your invite code is: ${inviteCode}`);
         return res.redirect('/admin/families');
-    } catch (error){
-        console.error('Error creating family:', error);
-        return res.redirect('/admin/families');
+    } catch (error) {
+        next(error);
     }
-}
+};
 
-const processUpdateFamily = async (req, res) => {
+const processUpdateFamily = async (req, res, next) => {
     const { id } = req.params;
     const { familyName } = req.body;
-
-    try{
+    try {
         await updateFamily(id, familyName);
-        req.flash('success', `Family updated!`);
+        req.flash('success', 'Family updated!');
         return res.redirect('/admin/families');
-    } catch (error){
-        console.error('Error updating family:', error);
-        return res.redirect('/admin/families');
+    } catch (error) {
+        next(error);
     }
-}
+};
 
-const processDeleteFamily = async (req, res) => {
+const processDeleteFamily = async (req, res, next) => {
     const { id } = req.params;
-    try{
+    try {
         await deleteFamily(id);
-        req.flash('success', `Family deleted!`);
+        req.flash('success', 'Family deleted!');
         return res.redirect('/admin/families');
-    } catch (error){
-        console.error('Error deleting family:', error);
-        res.redirect('/admin/families');
+    } catch (error) {
+        next(error);
     }
-}
+};
 
-const showFamilies = async (req, res) => {
-    try{
-        const families = await returnAllFamilies()
-
+const showFamilies = async (req, res, next) => {
+    try {
+        const families = await returnAllFamilies();
         return res.render('admin/families', {
             title: 'Manage Families',
             families
         });
-
-    } catch (error){
-        console.error('Error returning all families:', error);
-        return res.render('admin/families', {
-            title: 'Manage Families',
-            users: []
-        });
-        
+    } catch (error) {
+        next(error);
     }
-}
+};
+
 router.get('/', requireLogin, requireRole("admin"), showAdminDashboard);
-router.get('/users', requireLogin, requireRole("admin"), showManageUsers)
+router.get('/users', requireLogin, requireRole("admin"), showManageUsers);
 router.post('/users/:id/role', requireLogin, requireRole("admin"), processUpdateRole);
 router.post('/users/:id/delete', requireLogin, requireRole("admin"), processDeleteUser);
-router.get('/families', requireLogin, requireRole("admin"), showFamilies)
-router.post('/families', requireLogin, requireRole("admin"), processCreateFamily)
-router.post('/families/:id/edit', requireLogin, requireRole("admin"), processUpdateFamily)
-router.post('/families/:id/delete', requireLogin, requireRole("admin"), processDeleteFamily)
+router.get('/families', requireLogin, requireRole("admin"), showFamilies);
+router.post('/families', requireLogin, requireRole("admin"), processCreateFamily);
+router.post('/families/:id/edit', requireLogin, requireRole("admin"), processUpdateFamily);
+router.post('/families/:id/delete', requireLogin, requireRole("admin"), processDeleteFamily);
 
 export default router;

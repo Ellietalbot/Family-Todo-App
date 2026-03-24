@@ -27,5 +27,14 @@ const addLocalVariables = (req, res, next) => {
     next();
 };
 
+const addFlashMessages = (req, res, next) => {
+    res.locals.messages = {
+        success: req.flash('success'),
+        warning: req.flash('warning'),
+        error: req.flash('error')
+    };
+    next();
+};
 
-export { addLocalVariables };
+
+export { addLocalVariables, addFlashMessages };
