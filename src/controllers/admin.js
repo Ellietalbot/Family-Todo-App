@@ -5,6 +5,8 @@ import { deleteUser, createFamily, generateUniqueInviteCode } from '../models/fo
 
 const router = Router();
 
+// This function calls queries from the admin.js model all at once using Promise.all.
+// Responds with the admin dashboard view 
 const showAdminDashboard = async (req, res, next) => {
     try {
         const [familyCount, userCount, AverageSize, taskTotal, recentTaskActivity, allFamilies] = await Promise.all([
@@ -30,6 +32,7 @@ const showAdminDashboard = async (req, res, next) => {
     }
 };
 
+// Gets all users from the model and then passes that to the manage users view it renders
 const showManageUsers = async (req, res, next) => {
     try {
         const users = await getAllUsers();
@@ -42,6 +45,7 @@ const showManageUsers = async (req, res, next) => {
     }
 };
 
+// Updates a users role and then once done redirects back to the users page
 const processUpdateRole = async (req, res, next) => {
     const { id } = req.params;
     const { role } = req.body;
@@ -54,6 +58,7 @@ const processUpdateRole = async (req, res, next) => {
     }
 };
 
+// Deletes a user, safeguards a user from deleting their own account and redirects back to the users page. 
 const processDeleteUser = async (req, res, next) => {
     const { id } = req.params;
     const currentUser = req.session.user;
@@ -71,6 +76,7 @@ const processDeleteUser = async (req, res, next) => {
     }
 };
 
+//Allows admins to create families, generates an invite code for the family and redirects to the families page.
 const processCreateFamily = async (req, res, next) => {
     const { familyName } = req.body;
     try {
@@ -83,6 +89,7 @@ const processCreateFamily = async (req, res, next) => {
     }
 };
 
+// Allows admin to update family info 
 const processUpdateFamily = async (req, res, next) => {
     const { id } = req.params;
     const { familyName } = req.body;
@@ -95,6 +102,7 @@ const processUpdateFamily = async (req, res, next) => {
     }
 };
 
+// Allows admins to delete families. 
 const processDeleteFamily = async (req, res, next) => {
     const { id } = req.params;
     try {
@@ -106,6 +114,7 @@ const processDeleteFamily = async (req, res, next) => {
     }
 };
 
+// Returns all families and renders the family page
 const showFamilies = async (req, res, next) => {
     try {
         const families = await returnAllFamilies();
@@ -117,6 +126,7 @@ const showFamilies = async (req, res, next) => {
         next(error);
     }
 };
+
 
 router.get('/', requireLogin, requireRole("admin"), showAdminDashboard);
 router.get('/users', requireLogin, requireRole("admin"), showManageUsers);

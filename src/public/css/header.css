@@ -43,3 +43,13 @@ li a {
 li a:hover {
     color: white;
 }
+.logout{
+    background-color: transparent;
+    color: #5d5d5e;
+    font-size: larger;
+    
+}
+.logout:hover{
+    color: white;
+    background-color: transparent;
+}

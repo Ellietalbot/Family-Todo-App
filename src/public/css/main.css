@@ -243,9 +243,9 @@ input:hover {
     width: 100%;
 }
 .pending-task {
-    background-color: #fffde7;
-    border: 2px solid rgb(222, 222, 0);
-    
+    flex: 0.6;
+    background-color: white;
+    border: 2px solid whitesmoke;
     border-radius: 25px;
     padding: 30px;
 }

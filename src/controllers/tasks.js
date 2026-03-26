@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import { requireLogin } from '../middleware/auth.js';
-import { saveTask, getTaskByUserId, deleteTask, updateTask, completeTask, getPendingTasksForUser, acceptTask, denyTask } from '../models/forms/task.js';
+import { saveTask, getTaskByUserId, deleteTask, updateTask, completeTask, getPendingTasksForUser, acceptTask, denyTask, getTasksCreatedByUser } from '../models/forms/task.js';
 import { returnFamilyMemberInfo } from '../models/family.js';
+import { getComments, postComment } from '../controllers/comments.js';
 
 const router = Router();
 
@@ -87,14 +88,27 @@ const showUsersTasks = async (req, res, next) => {
     const familyId = req.session.user.family_id;
 
     try {
-        const [allTasks, pendingTasks, users] = await Promise.all([
+        const [allTasks, pendingTasks, delegatedTasks, users] = await Promise.all([
             getTaskByUserId(user_id),
             getPendingTasksForUser(user_id),
+            getTasksCreatedByUser(user_id),
             returnFamilyMemberInfo(familyId)
         ]);
 
         const activeTasks = allTasks.filter(t => t.status === 'active');
         const completedTasks = allTasks.filter(t => t.status === 'completed');
+
+        for (const task of pendingTasks) {
+            const { comments, comment_count } = await getComments(task.task_id);
+            task.comments = comments;
+            task.comment_count = comment_count;
+        }
+        
+        for (const task of delegatedTasks) {
+            const { comments, comment_count } = await getComments(task.task_id);
+            task.comments = comments;
+            task.comment_count = comment_count;
+        }       
 
         return res.render('tasks/task-list', {
             title: 'My Tasks',
@@ -102,13 +116,13 @@ const showUsersTasks = async (req, res, next) => {
             currentUser: req.session.user,
             activeTasks,
             completedTasks,
-            pendingTasks
+            pendingTasks,
+            delegatedTasks
         });
     } catch (error) {
         next(error);
     }
 };
-
 router.get('/', requireLogin, showUsersTasks);
 router.post('/', requireLogin, processTask);
 router.post('/:id/complete', requireLogin, markTaskComplete);
@@ -116,6 +130,7 @@ router.post('/:id/edit', requireLogin, editTask);
 router.post('/:id/delete', requireLogin, deleteUserTask);
 router.post('/:id/accept', requireLogin, acceptUserTask);
 router.post('/:id/deny', requireLogin, denyUserTask);
+router.post('/:id/comment', requireLogin, postComment);
 
 export default router;
 export { showUsersTasks, processTask, markTaskComplete, editTask, deleteUserTask };

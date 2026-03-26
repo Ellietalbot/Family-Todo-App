@@ -6,6 +6,9 @@ import { processTask } from './tasks.js';
 
 const router = Router();
 
+// Gets the users id and family id from the user session object, calls the dashboard.js model functions and assigns them to variables
+// Separates the tasks from the completed tasks using filter 
+// Renders the dashboard view and passes the variables so the view can access them.  
 const showDashboard = async (req, res, next) => {
     const user_id = req.session.user.user_id;
     const familyId = req.session.user.family_id;

@@ -1,0 +1,127 @@
+.comment-toggle {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    cursor: pointer;
+    padding: 8px 4px;
+    color: #4a5568;
+    font-size: 0.9rem;
+    user-select: none;
+    border-top: 1px solid rgba(0,0,0,0.06);
+    margin-top: 8px;
+}
+ 
+.comment-toggle i {
+    font-size: 1rem;
+}
+ 
+.comment-toggle p {
+    margin: 0;
+    flex: 1;
+}
+ 
+.toggle-arrow {
+    font-size: 0.7rem !important;
+    transition: transform 0.2s ease;
+}
+ 
+.toggle-arrow.open {
+    transform: rotate(180deg);
+}
+ 
+.comment-dropdown {
+    padding: 10px 4px 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+ 
+.comment {
+    background: white;
+    border-radius: 10px;
+    padding: 12px 14px;
+}
+ 
+.comment-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+ 
+.comment-author {
+    margin: 0;
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: #1a202c;
+}
+ 
+.comment-time {
+    margin: 0;
+    font-size: 0.82rem;
+    color: #718096;
+}
+ 
+.comment-content {
+    margin: 0;
+    font-size: 0.88rem;
+    color: #2d3748;
+    line-height: 1.4;
+}
+ 
+.comment-divider {
+    border: none;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    margin: 4px 0;
+}
+ 
+.comment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+ 
+.comment-form textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: none;
+    background: white;
+    font-size: 0.88rem;
+    color: #2d3748;
+    resize: none;
+    font-family: inherit;
+    outline: none;
+    box-sizing: border-box;
+}
+ 
+.comment-form textarea::placeholder {
+    color: #718096;
+}
+ 
+.comment-form-footer {
+    display: flex;
+    justify-content: flex-end;
+}
+ 
+.send-comment-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e87c58;
+    border: none;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    aspect-ratio: 1 / 1;
+    align-self: flex-end;
+}
+
+.send-comment-button:hover {
+    background: #e87c58;
+    transform: translateY(-1px);
+}
+ 
+.send-comment-button:active {
+    transform: translateY(0);
+}

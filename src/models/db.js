@@ -20,7 +20,7 @@ const pool = new Pool({
 
 let db = null;
 
-if (process.env.NODE_ENV.includes('dev') && process.env.ENABLE_SQL_LOGGING === 'true') {
+if (process.env.NODE_ENV?.includes('dev') && process.env.ENABLE_SQL_LOGGING === 'true') {
 
     db = {
         async query(text, params) {
