@@ -29,7 +29,7 @@
                             <button type="submit" class="btn-deny">Deny</button>
                         </form>
                     </div>
-                    <div class="comment-toggle" onclick="toggleComments(<%= task.task_id %>)">
+                    <div class="comment-toggle" data-task-id="<%= task.task_id %>">
                         <i class="bi bi-chat"></i>
                         <p><%= task.comment_count || 0 %> Comment<%= (task.comment_count !== 1) ? 's' : '' %></p>
                         <i class="bi bi-caret-down-fill toggle-arrow" id="arrow-<%= task.task_id %>"></i>
@@ -90,7 +90,7 @@
                             <form method="POST" action="/tasks/<%= task.task_id %>/complete">
                                 <button type="submit">Complete</button>
                             </form>
-                            <button class="btn-edit" onclick="toggleEdit(<%= task.task_id %>)">
+                            <button class="btn-edit" data-task-id="<%= task.task_id %>">
                                 <i class="bi bi-pencil"></i>
                             </button>
                             <form method="POST" action="/tasks/<%= task.task_id %>/delete">
@@ -135,7 +135,7 @@
                             </div>
                             <div class="task-actions">
                                 <button type="submit">Save</button>
-                                <button type="button" onclick="toggleEdit(<%= task.task_id %>)">Cancel</button>
+                                <button class="btn-edit" data-task-id="<%= task.task_id %>">Cancel</button>
                             </div>
                         </form>
                     </div>
@@ -189,7 +189,7 @@
                                 </form>
                             </div>
                         </div>
-                        <div class="comment-toggle" onclick="toggleComments(<%= task.task_id %>)">
+                        <div class="comment-toggle" data-task-id="<%= task.task_id %>">
                             <i class="bi bi-chat"></i>
                             <p><%= task.comment_count || 0 %> Comment<%= (task.comment_count !== 1) ? 's' : '' %></p>
                             <i class="bi bi-caret-down-fill toggle-arrow" id="arrow-<%= task.task_id %>"></i>
@@ -229,6 +229,14 @@
     const activeTasks = document.getElementById('active-tasks');
     const completedTasks = document.getElementById('completed-tasks');
     const delegatedTasks = document.getElementById('delegated-tasks');
+
+    document.querySelectorAll('.comment-toggle').forEach(el => {
+        el.addEventListener('click', () => toggleComments(el.dataset.taskId));
+    });
+
+    document.querySelectorAll('.btn-edit').forEach(el => {
+        el.addEventListener('click', () => toggleEdit(el.dataset.taskId));
+    });
 
     taskTypeButtons.forEach((button, index) => {
         button.addEventListener('click', () => {

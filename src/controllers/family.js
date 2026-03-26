@@ -1,6 +1,7 @@
 import { returnFamilyMemberInfo, getFamilyById } from "../models/family.js";
 import { getAllTasksByFamily } from "../models/forms/task.js";
 
+//This function gets the families info such as names and roles, and gets their tasks, it then passes those variables to the renderer.
 const returnFamilyMembers = async (req, res, next) => {
     const familyId = req.session.user.family_id;
     
@@ -11,7 +12,7 @@ const returnFamilyMembers = async (req, res, next) => {
             getAllTasksByFamily(familyId)
         ]);
 
-        if (!info) {
+        if (!info || info.length === 0) {
             req.flash('error', 'No family members to display');
             return res.redirect('/family');
         }

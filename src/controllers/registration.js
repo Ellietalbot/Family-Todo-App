@@ -6,10 +6,18 @@ import { registrationValidation } from '../middleware/forms/validation.js';
 
 const router = Router();
 
+//renders the registration form
 const showRegistrationForm = (req, res) => {
     res.render('registration/form', { title: 'User Registration' });
 };
 
+/* The function displays a flash message for each validation error during registration. It then gets the data from the request body
+It uses that data to check if the user is already in the data base. If the user doesn't exist the password is hashed and goes through 10 
+salt rounds. Then it handles the different family options, if a family is created, a unique family invite code is generated, a new family is inserted in the database, 
+a new user is added to the database, and then the user data is added to the session user. If a user tries to join a family, it checks if the invite code is valid. If the code is valid
+it adds the user and their family info to the database and save the user info to the session. 
+
+*/
 const processRegistration = async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -25,7 +33,7 @@ const processRegistration = async (req, res, next) => {
         const emailAlreadyExists = await emailExists(email);
         if (emailAlreadyExists) {
             req.flash('warning', 'An account with this email already exists.');
-            return res.redirect('/register');
+            return res.redirect('/login');
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);

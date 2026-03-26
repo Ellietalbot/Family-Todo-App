@@ -6,6 +6,7 @@ import { getComments, postComment } from '../controllers/comments.js';
 
 const router = Router();
 
+//processes the creation of a task. Gets the data from the request session and body, and plug them into the save task function from the modal. 
 const processTask = async (req, res, next) => {
     const { title, description, due_date, category } = req.body;
     const createdBy = req.session.user.user_id;
@@ -22,6 +23,7 @@ const processTask = async (req, res, next) => {
     }
 };
 
+//Gets the task id from the request parameters and the task details from the request body. Then it updates the task with the new data.
 const editTask = async (req, res, next) => {
     const taskId = req.params.id;
     const { title, description, due_date, category, assigned_to } = req.body;
@@ -34,6 +36,7 @@ const editTask = async (req, res, next) => {
     }
 };
 
+//Marks the task as complete
 const markTaskComplete = async (req, res, next) => {
     const taskId = req.params.id;
     const redirectTo = req.body.redirect || '/tasks';
@@ -47,6 +50,7 @@ const markTaskComplete = async (req, res, next) => {
     }
 };
 
+//Deletes the task
 const deleteUserTask = async (req, res, next) => {
     const taskId = req.params.id;
     const redirectTo = req.body.redirect || '/tasks';
@@ -59,6 +63,7 @@ const deleteUserTask = async (req, res, next) => {
     }
 };
 
+//Accepts the pending task and adds it to the user's task list.
 const acceptUserTask = async (req, res, next) => {
     const taskId = req.params.id;
     const redirectTo = req.body.redirect || '/tasks';
@@ -71,6 +76,7 @@ const acceptUserTask = async (req, res, next) => {
     }
 };
 
+//Denys the pending task and sends it back to the creator's task list. 
 const denyUserTask = async (req, res, next) => {
     const taskId = req.params.id;
     const redirectTo = req.body.redirect || '/tasks';
@@ -83,6 +89,8 @@ const denyUserTask = async (req, res, next) => {
     }
 };
 
+//Gets the all tasks associated with the user. Filters the tasks by status, and adds comments to the pending and delegated tasks.
+//Passes that data to the view with res.render.
 const showUsersTasks = async (req, res, next) => {
     const user_id = req.session.user.user_id;
     const familyId = req.session.user.family_id;
@@ -103,7 +111,7 @@ const showUsersTasks = async (req, res, next) => {
             task.comments = comments;
             task.comment_count = comment_count;
         }
-        
+
         for (const task of delegatedTasks) {
             const { comments, comment_count } = await getComments(task.task_id);
             task.comments = comments;
