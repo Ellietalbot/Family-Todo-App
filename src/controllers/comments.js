@@ -1,4 +1,5 @@
 import { saveComment, countComments, returnTaskComments } from "../models/forms/comments.js";
+import { validationResult } from "express-validator";
 
 //Returns the date the comment was posted
 const datePosted = (date) => {
@@ -26,6 +27,13 @@ const getComments = async (taskId) => {
 
 //This function posts the comment by using the models saveComment function to save it to the database
 const postComment = async (req, res, next) => {
+    const isValid = validationResult(req)
+    if (!isValid.isEmpty()) {
+        errors.array().forEach(error => {
+            req.flash('warning', error.msg);
+        });
+        return res.redirect('/register');
+    }
     const { id } = req.params;
     const { comment } = req.body;
     const user_id = req.session.user.user_id;

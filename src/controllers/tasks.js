@@ -3,11 +3,21 @@ import { requireLogin } from '../middleware/auth.js';
 import { saveTask, getTaskByUserId, deleteTask, updateTask, completeTask, getPendingTasksForUser, acceptTask, denyTask, getTasksCreatedByUser } from '../models/forms/task.js';
 import { returnFamilyMemberInfo } from '../models/family.js';
 import { getComments, postComment } from '../controllers/comments.js';
+import { taskValidation, commentValidation } from '../middleware/forms/validation.js';
+import { validationResult } from 'express-validator';
 
 const router = Router();
 
 //processes the creation of a task. Gets the data from the request session and body, and plug them into the save task function from the modal. 
 const processTask = async (req, res, next) => {
+    const isValid = validationResult(req)
+    if (!isValid.isEmpty()) {
+        isValid.array().forEach(error => {
+            req.flash('warning', error.msg);
+        });
+        return res.redirect('/');
+    }
+
     const { title, description, due_date, category } = req.body;
     const createdBy = req.session.user.user_id;
     const familyId = req.session.user.family_id;
@@ -132,13 +142,13 @@ const showUsersTasks = async (req, res, next) => {
     }
 };
 router.get('/', requireLogin, showUsersTasks);
-router.post('/', requireLogin, processTask);
+router.post('/', requireLogin, taskValidation, processTask);
 router.post('/:id/complete', requireLogin, markTaskComplete);
 router.post('/:id/edit', requireLogin, editTask);
 router.post('/:id/delete', requireLogin, deleteUserTask);
 router.post('/:id/accept', requireLogin, acceptUserTask);
 router.post('/:id/deny', requireLogin, denyUserTask);
-router.post('/:id/comment', requireLogin, postComment);
+router.post('/:id/comment', requireLogin, commentValidation, postComment);
 
 export default router;
 export { showUsersTasks, processTask, markTaskComplete, editTask, deleteUserTask };

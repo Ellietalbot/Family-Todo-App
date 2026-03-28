@@ -55,4 +55,31 @@ const registrationValidation = [
         .withMessage('Passwords must match')
 ];
 
-export { loginValidation, registrationValidation }
+const taskValidation = [
+    body('title')
+        .trim()
+        .notEmpty()
+        .withMessage('Please include a title')
+        .isLength({min:2, max: 255})
+        .withMessage('Title must be between 1 and 255 characters'),
+    body('due_date')
+        .optional({ checkFalsy: true })
+        .isDate()
+        .withMessage('Please include a valid date'),
+    body('category')
+        .notEmpty()
+        .withMessage('Please choose a category')
+        .isIn(['errands', 'chores', 'personal', 'homework', 'other'])
+        .withMessage('Please choose a valid category')
+]
+
+const commentValidation = [
+    body('content')
+        .trim()
+        .notEmpty()
+        .withMessage('Comment cannot be empty')
+        .isLength({min:2, max:1000})
+        .withMessage('Comment must be between 2 and 1000 words')
+]
+
+export { loginValidation, registrationValidation, taskValidation, commentValidation }
