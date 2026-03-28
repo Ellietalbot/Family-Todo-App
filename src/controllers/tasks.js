@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { requireLogin } from '../middleware/auth.js';
-import { saveTask, getTaskByUserId, deleteTask, updateTask, completeTask, getPendingTasksForUser, acceptTask, denyTask, getTasksCreatedByUser } from '../models/forms/task.js';
+import { saveTask, getTaskbyTaskId, getTaskByUserId, deleteTask, updateTask, completeTask, getPendingTasksForUser, acceptTask, denyTask, getTasksCreatedByUser } from '../models/forms/task.js';
 import { returnFamilyMemberInfo } from '../models/family.js';
 import { getComments, postComment } from '../controllers/comments.js';
 import { taskValidation, commentValidation } from '../middleware/forms/validation.js';
@@ -35,9 +35,23 @@ const processTask = async (req, res, next) => {
 
 //Gets the task id from the request parameters and the task details from the request body. Then it updates the task with the new data.
 const editTask = async (req, res, next) => {
-    const taskId = req.params.id;
-    const { title, description, due_date, category, assigned_to } = req.body;
-    try {
+   try {
+        const taskId = req.params.id;
+        const { title, description, due_date, category, assigned_to } = req.body;
+        const task = await getTaskbyTaskId(taskId);
+
+        if (!task){
+            req.flash('error', 'Task does not exist')
+            return res.redirect('/tasks');
+        }
+
+        const isAllowed = task.created_by == req.session.user.user_id || req.session.user.role == 'parent' || req.session.user.role == 'admin';
+
+        if (!isAllowed){
+            req.flash('error', 'You are unauthorized to edit this task')
+            return res.redirect('/tasks');
+        }
+        
         await updateTask(taskId, title, description, due_date, category, assigned_to);
         req.flash('success', 'Task updated successfully.');
         res.redirect('/tasks');
@@ -62,9 +76,25 @@ const markTaskComplete = async (req, res, next) => {
 
 //Deletes the task
 const deleteUserTask = async (req, res, next) => {
-    const taskId = req.params.id;
-    const redirectTo = req.body.redirect || '/tasks';
     try {
+        const taskId = req.params.id;
+        const redirectTo = req.body.redirect || '/tasks';
+        const task = await getTaskbyTaskId(taskId);
+       
+
+        if (!task){
+            req.flash('error', 'Task does not exist')
+            return res.redirect(redirectTo);
+        }
+
+        const isAllowed = task.created_by == req.session.user.user_id || req.session.user.role == 'parent' || req.session.user.role == 'admin';
+        
+        if (!isAllowed){
+            req.flash('error', 'You are unauthorized to delete this task')
+            return res.redirect(redirectTo);
+        }
+        
+
         await deleteTask(taskId);
         req.flash('success', 'Task deleted.');
         res.redirect(redirectTo);

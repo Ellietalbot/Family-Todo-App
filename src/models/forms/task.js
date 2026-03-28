@@ -14,6 +14,12 @@ const logTaskHistory = async (task_id, changed_by, old_status, new_status) => {
     await db.query(query, [task_id, changed_by, old_status, new_status]);
 };
 
+const getTaskbyTaskId = async (taskId) => {
+    `SELECT * FROM task WHERE task_id = $1`;
+    const result = await db.query(query, [taskId]);
+    return result.rows[0];
+}
+
 const getTaskByUserId = async (user_id) => {
     const query = `
         SELECT task.*, users.name AS assigner_name 
@@ -45,6 +51,7 @@ const getTaskAssigner = async (taskId) => {
     const result = await db.query(query, [taskId]);
     return result.rows[0];
 };
+
 
 const updateTask = async (taskId, title, description, due_date, category, assigned_to) => {
     const query = `
@@ -114,4 +121,4 @@ const getPendingTasksForUser = async (user_id) => {
     return result.rows;
 };
 
-export { saveTask, getTaskByUserId, deleteTask, getAllTasksByFamily, getTaskAssigner, updateTask, completeTask, getTasksCreatedByUser, acceptTask, denyTask, getPendingTasksForUser };
+export { saveTask, getTaskbyTaskId, getTaskByUserId, deleteTask, getAllTasksByFamily, getTaskAssigner, updateTask, completeTask, getTasksCreatedByUser, acceptTask, denyTask, getPendingTasksForUser };
