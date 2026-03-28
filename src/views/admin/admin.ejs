@@ -18,9 +18,10 @@
             <h3><%=taskTotal.count%></h3>
         </div>
     </div>
-    <section>
+    <div class="admin-section">
+
         <h2>Recent Activity</h2>
-        <table>
+        <table class="admin-table">
             <thead>    
                 <tr>
                     <th>Task</th>
@@ -40,27 +41,31 @@
             <% }) %>
             </tbody>
         </table>
-        </section>
-        <section> 
-            <h2>All Families</h2>
-            <table>
-                <thead>    
-                    <tr>
-                        <th>Family Name</th>
-                        <th>Invite Code</th>
-                        <th>Created At</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <% allFamilies.forEach(family => { %>
-                    <tr>
-                        <td><%= family.family_name%></td>
-                        <td><%= family.invite_code%></td>
-                        <td><%= new Date(family.created_at).toLocaleDateString() %></td>
-                    </tr>
-                <% }) %>
-                </tbody>
-            </table>
-        </section>
+    </div>
+    
+    <div class="admin-section">
+
+        <h2>All Families</h2>
+        <table class="admin-table">
+            <thead>    
+                <tr>
+                    <th>Family Name</th>
+                    <th>Invite Code</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+            <% allFamilies.forEach(family => { %>
+                <tr>
+                    <td><%= family.family_name%></td>
+                    <td><span class="invite-badge"><%= family.invite_code%></span></td>
+                    <td><%= new Date(family.created_at).toLocaleDateString() %></td>
+                </tr>
+            <% }) %>
+            </tbody>
+        </table>
+
+    </div>
+
 </main>
 <%- include('../partials/footer') %>

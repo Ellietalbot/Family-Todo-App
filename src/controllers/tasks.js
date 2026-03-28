@@ -18,7 +18,7 @@ const processTask = async (req, res, next) => {
         return res.redirect('/');
     }
 
-    const { title, description, due_date, category } = req.body;
+    const { title, description, category } = req.body;
     const createdBy = req.session.user.user_id;
     const familyId = req.session.user.family_id;
     const assignedTo = req.body['assign-to'] || createdBy;

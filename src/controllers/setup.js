@@ -4,10 +4,12 @@ import { requireLogin } from '../middleware/auth.js';
 
 const router = Router();
 
+//shows the setup modal
 const showModal = (req, res) => {
-    res.render('partials/modal', { title: 'Setup' });
+    res.render('partials/setup', { title: 'Setup' });
 };
 
+//processes the setup modal. Updates the users role with the selected role type in both the database and the session
 const processModal = async (req, res, next) => {
     const user_id = req.session.user.user_id;
     const { role } = req.body;

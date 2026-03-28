@@ -4,13 +4,16 @@ import { Router } from 'express';
 import { loginValidation } from '../middleware/forms/validation.js';
 
 const router = Router();
-
+//displays the login form
 const showLoginForm = (req, res) => {
     res.render('login/form', {
         title: 'User Login'
     });
 };
 
+/* Checks for validation errors and flashes them if any. Gets the email and password from the request body 
+and checks to see if the email exists in the database. Then it checks if the password is valid and deletes the password and saves the users data to
+the session. It then decides what to display based on the users role.  */
 const processLogin = async (req, res, next) => {
 
     const errors = validationResult(req);
@@ -27,13 +30,13 @@ const processLogin = async (req, res, next) => {
         const user = await findUserByEmail(email);
         if (!user) {
             req.flash('error', 'Invalid email or password');
-            return res.redirect('/login');
+            return req.session.save(() => res.redirect('/login'));
         }
 
         const passwordIsValid = await verifyPassword(password, user.password_hash);
         if (!passwordIsValid) {
             req.flash('error', 'Invalid email or password');
-            return res.redirect('/login');
+            return req.session.save(() => res.redirect('/login'));
         }
 
         delete user.password_hash;
@@ -50,6 +53,7 @@ const processLogin = async (req, res, next) => {
     }
 };
 
+// If there isn't a session it redirects login. If there is an active session, it destroys it clears cookies and then redirects to login. 
 const processLogout = (req, res, next) => {
     if (!req.session) {
         return res.redirect('/login');

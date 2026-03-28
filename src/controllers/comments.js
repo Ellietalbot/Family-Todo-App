@@ -45,7 +45,7 @@ const postComment = async (req, res, next) => {
     }
 };
 
-const deleteComment = async (req, res, next) => {
+const handleDeleteComment = async (req, res, next) => {
     try{
         const commentId = req.params.id;
         const redirectTo = req.body.redirect || '/tasks';
@@ -72,7 +72,7 @@ const deleteComment = async (req, res, next) => {
     }
 }
 
-const updateComment = async (req, res, next) => {
+const handleUpdateComment = async (req, res, next) => {
     try{
         const commentId = req.params.id;
         const redirectTo = req.body.redirect || '/tasks';
@@ -98,4 +98,4 @@ const updateComment = async (req, res, next) => {
         next(error);
     }
 }
-export { getComments, postComment, deleteComment, updateComment };
+export { getComments, postComment, handleDeleteComment, handleUpdateComment };
