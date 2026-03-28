@@ -7,7 +7,7 @@ const countComments = async (taskId) => {
 }
 
 const returnTaskComments = async (taskId) => {
-    const query = `SELECT users.name AS author_name, comments.content, comments.created_at 
+    const query = `SELECT users.name AS author_name, comments.content, comments.created_at, comments.comment_id, comments.user_id
                    FROM comments 
                    JOIN users ON comments.user_id = users.user_id
                    WHERE comments.task_id = $1

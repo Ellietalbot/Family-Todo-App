@@ -41,6 +41,14 @@
                                     <div class="comment-top">
                                         <p class="comment-author"><%= comment.author_name %></p>
                                         <p class="comment-time"><%= comment.time_ago %></p>
+                                            <% if (comment.user_id == currentUser.user_id) { %>
+                                                <form method="POST" action="/tasks/<%= comment.comment_id %>/comment/delete">
+                                                    <button type="submit" class="btn-delete"><i class="bi bi-trash"></i></button>
+                                                </form>
+                                                <form method="POST" action="/tasks/<%= comment.comment_id %>/comment/edit">
+                                                    <button type="submit" class="btn-delete"><i class="bi bi-pencil"></i></button>
+                                                </form>
+                                            <% } %>
                                     </div>
                                     <p class="comment-content"><%= comment.content %></p>
                                 </div>
@@ -48,7 +56,7 @@
                         <% } %>
                         <hr class="comment-divider">
                         <form method="POST" action="/tasks/<%= task.task_id %>/comment" class="comment-form">
-                            <textarea name="comment" placeholder="Add a comment or question..." rows="3"></textarea>
+                            <textarea name="content" placeholder="Add a comment or question..." rows="3"></textarea>
                             <div class="comment-form-footer">
                                 <button type="submit" class="send-comment-button">
                                     <i class="bi bi-send"></i>
@@ -201,6 +209,14 @@
                                         <div class="comment-top">
                                             <p class="comment-author"><%= comment.author_name %></p>
                                             <p class="comment-time"><%= comment.time_ago %></p>
+                                            <% if (comment.user_id == currentUser.user_id) { %>
+                                                <form method="POST" action="/tasks/<%= comment.comment_id %>/comment/delete">
+                                                    <button type="submit" class="btn-delete"><i class="bi bi-trash"></i></button>
+                                                </form>
+                                                <form method="POST" action="/tasks/<%= comment.comment_id %>/comment/edit">
+                                                    <button type="submit" class="btn-delete"><i class="bi bi-pencil"></i></button>
+                                                </form>
+                                            <% } %>
                                         </div>
                                         <p class="comment-content"><%= comment.content %></p>
                                     </div>
@@ -208,7 +224,7 @@
                             <% } %>
                             <hr class="comment-divider">
                             <form method="POST" action="/tasks/<%= task.task_id %>/comment" class="comment-form">
-                                <textarea name="comment" placeholder="Add a comment or question..." rows="3"></textarea>
+                                <textarea name="content" placeholder="Add a comment or question..." rows="3"></textarea>
                                 <div class="comment-form-footer">
                                     <button type="submit" class="send-comment-button">
                                         <i class="bi bi-send"></i>
