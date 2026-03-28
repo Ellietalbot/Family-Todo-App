@@ -67,7 +67,7 @@ const updateFamily = async (familyId, familyName) => {
         UPDATE family SET family_name=$1
         WHERE family_id=$2
         RETURNING *`;
-    const result = await db.query(query, [familyId, familyName]);
+    const result = await db.query(query, [familyName, familyId]);
     return result.rows[0];
 }
 export { countFamilies, countUsers, averageFamilySize, totalTasks, recentActivity, returnAllFamilies, getAllUsers, updateUserRole, deleteFamily, updateFamily }

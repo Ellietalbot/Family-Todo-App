@@ -3,6 +3,7 @@ import { requireLogin, requireParent } from '../middleware/auth.js';
 import { getTaskByUserId, getTasksCreatedByUser } from '../models/forms/task.js';
 import { returnFamilyMemberInfo } from '../models/family.js';
 import { processTask } from './tasks.js';
+import { taskValidation } from '../middleware/forms/validation.js';
 
 const router = Router();
 
@@ -37,6 +38,6 @@ const showDashboard = async (req, res, next) => {
 };
 
 router.get('/', requireLogin, requireParent, showDashboard);
-router.post('/', requireLogin, processTask);
+router.post('/', requireLogin, taskValidation, processTask);
 
 export default router;

@@ -42,14 +42,14 @@
                                     <div class="comment-top">
                                         <p class="comment-author"><%= comment.author_name %></p>
                                         <p class="comment-time"><%= comment.time_ago %></p>
-                                            <% if (comment.user_id == currentUser.user_id) { %>
-                                                <form method="POST" action="/tasks/<%= comment.comment_id %>/comment/delete">
-                                                    <button type="submit" class="btn-delete"><i class="bi bi-trash"></i></button>
-                                                </form>
-                                                <form method="POST" action="/tasks/<%= comment.comment_id %>/comment/edit">
-                                                    <button type="submit" class="btn-delete"><i class="bi bi-pencil"></i></button>
-                                                </form>
-                                            <% } %>
+                                        <% if (comment.user_id == currentUser.user_id) { %>
+                                            <form method="POST" action="/tasks/<%= comment.comment_id %>/comment/delete">
+                                                <button type="submit" class="btn-delete"><i class="bi bi-trash"></i></button>
+                                            </form>
+                                            <form method="POST" action="/tasks/<%= comment.comment_id %>/comment/edit">
+                                                <button type="submit" class="btn-delete"><i class="bi bi-pencil"></i></button>
+                                            </form>
+                                        <% } %>
                                     </div>
                                     <p class="comment-content"><%= comment.content %></p>
                                 </div>
@@ -99,15 +99,18 @@
                             <form method="POST" action="/tasks/<%= task.task_id %>/complete">
                                 <button type="submit">Complete</button>
                             </form>
-                            <button class="btn-edit" data-task-id="<%= task.task_id %>">
-                                <i class="bi bi-pencil"></i>
-                            </button>
-                            <form method="POST" action="/tasks/<%= task.task_id %>/delete">
-                                <button type="submit" class="btn-delete"><i class="bi bi-trash"></i></button>
-                            </form>
+                            <% if (task.created_by == currentUser.user_id || currentUser.role == 'parent' || currentUser.role == 'admin') { %>
+                                <button class="btn-edit" data-task-id="<%= task.task_id %>">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <form method="POST" action="/tasks/<%= task.task_id %>/delete">
+                                    <button type="submit" class="btn-delete"><i class="bi bi-trash"></i></button>
+                                </form>
+                            <% } %>
                         </div>
                     </div>
 
+                    <% if (task.created_by == currentUser.user_id || currentUser.role == 'parent' || currentUser.role == 'admin') { %>
                     <div class="edit-form" id="edit-<%= task.task_id %>" style="display:none;">
                         <form method="POST" action="/tasks/<%= task.task_id %>/edit">
                             <div class="form-group">
@@ -148,6 +151,7 @@
                             </div>
                         </form>
                     </div>
+                    <% } %>
                 </div>
             <% }) %>
         </div>
@@ -164,9 +168,11 @@
                             </p>
                         </div>
                         <div class="task-actions">
-                            <form method="POST" action="/tasks/<%= task.task_id %>/delete">
-                                <button type="submit" class="btn-delete"><i class="bi bi-trash"></i></button>
-                            </form>
+                            <% if (task.created_by == currentUser.user_id || currentUser.role == 'parent' || currentUser.role == 'admin') { %>
+                                <form method="POST" action="/tasks/<%= task.task_id %>/delete">
+                                    <button type="submit" class="btn-delete"><i class="bi bi-trash"></i></button>
+                                </form>
+                            <% } %>
                         </div>
                     </div>
                 </div>
@@ -193,9 +199,11 @@
                                 <% } %>
                             </div>
                             <div class="task-actions">
-                                <form method="POST" action="/tasks/<%= task.task_id %>/delete">
-                                    <button type="submit" class="btn-delete"><i class="bi bi-trash"></i></button>
-                                </form>
+                                <% if (task.created_by == currentUser.user_id || currentUser.role == 'parent' || currentUser.role == 'admin') { %>
+                                    <form method="POST" action="/tasks/<%= task.task_id %>/delete">
+                                        <button type="submit" class="btn-delete"><i class="bi bi-trash"></i></button>
+                                    </form>
+                                <% } %>
                             </div>
                         </div>
                         <div class="comment-toggle" data-task-id="<%= task.task_id %>">

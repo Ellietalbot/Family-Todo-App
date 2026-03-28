@@ -65,7 +65,7 @@ const processDeleteUser = async (req, res, next) => {
 
     if (parseInt(id) === currentUser.user_id) {
         req.flash('error', 'You cannot delete your own account.');
-        return res.redirect('/admin/users');
+        return req.session.save(() => res.redirect('/admin/users'));
     }
     try {
         await deleteUser(id);
