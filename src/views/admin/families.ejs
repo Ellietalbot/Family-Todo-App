@@ -9,8 +9,8 @@
 
 
         <% families.forEach(family => { %>
-            <div class="family-card-top">
-                <div class="family-card-info">
+            <div class="admin-card">
+                <div class="admin-card-info">
                     <p>
                         <strong class="family-name"><%= family.family_name %></strong>
                         <span class="family-invite-code"><%= family.invite_code %></span>
@@ -30,7 +30,8 @@
                 </div>
             </div>
             <div class="edit-family" id="edit-<%= family.family_id %>" style="display:none;">
-                <form method="POST" action="/admin/families/<%= family.family_id %>/edit">
+                <div class="edit-panel">
+                    <form method="POST" action="/admin/families/<%= family.family_id %>/edit">
                     <div class="form-group">
                         <label>Family Name</label>
                         <input type="text" name="familyName" value="<%= family.family_name %>" required>
@@ -38,6 +39,7 @@
                     <button type="submit">Save</button>
                     <button type="button" onclick="toggleEdit(<%= family.family_id %>)">Cancel</button>
                 </form>
+                </div>
             </div>
         <% }) %>
     </div>
