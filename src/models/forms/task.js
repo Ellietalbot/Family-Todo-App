@@ -15,7 +15,7 @@ const logTaskHistory = async (task_id, changed_by, old_status, new_status) => {
 };
 
 const getTaskbyTaskId = async (taskId) => {
-    `SELECT * FROM task WHERE task_id = $1`;
+    const query = `SELECT * FROM task WHERE task_id = $1`;
     const result = await db.query(query, [taskId]);
     return result.rows[0];
 }
