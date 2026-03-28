@@ -23,4 +23,22 @@ const saveComment = async (taskId, userID, content) => {
     const result = await db.query(query, [taskId, userID, content]);
     return result.rows[0];
 };
-export { countComments, saveComment, returnTaskComments }
+
+const getCommentbyCommentId = async (commentId) => {
+    const query =  `SELECT * FROM comments WHERE comment_id = $1`
+    const result = await db.query(query, [commentId]);
+    return result.rows[0];
+}
+
+const deleteComment = async (commentId) => {
+    const query = `DELETE FROM comments WHERE comment_id = $1`
+    const result = await db.query(query, [commentId])
+    return result.rowCount > 0;
+}
+
+const updateComment = async (content, commentId) => {
+    const query = `UPDATE comments SET content = $1 WHERE comment_id = $2`;
+    const result = await db.query(query, [content, commentId]);
+   return result.rows[0];
+}
+export { countComments, saveComment, returnTaskComments, getCommentbyCommentId, deleteComment, updateComment }
