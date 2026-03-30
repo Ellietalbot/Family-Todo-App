@@ -1,5 +1,7 @@
 import { body } from 'express-validator';
 
+//uses express validator to validate input and sanitize it. Validation errors allow us to display
+// flash messages for better UX.
 const loginValidation = [
     body('email')
         .trim()

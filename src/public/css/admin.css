@@ -1,4 +1,4 @@
-main{
+.admin-main{
     display: flex;
     flex-direction: column;
 }

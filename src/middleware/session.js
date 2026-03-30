@@ -4,6 +4,10 @@ import { caCert } from '../models/db.js';
 
 const pgSession = connectPgSimple(session);
 
+//The session middleware uses postgress to store the session in a table . It connects to the 
+// database using ssl. Signs the session key with the session secret, and doesn't save or store the session if nothing as changed.
+//Sets the cookie to send only in production, http only ensures it can't be read by JS, and max age makes it last a day.
+
 const sessionMiddleware = session({
     store: new pgSession({
         conObject: {

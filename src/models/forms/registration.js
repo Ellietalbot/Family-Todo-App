@@ -30,6 +30,7 @@ const deleteUser = async (userId) => {
     const result = await db.query(query, [userId]);
     return result.rowCount > 0;
 };
+
 const generateInviteCode = (familyName) => {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     const part1 = familyName.trim().toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 5);

@@ -44,8 +44,8 @@ const postComment = async (req, res, next) => {
         next(error);
     }
 };
-
-const handleDeleteComment = async (req, res, next) => {
+//Checks is the comment exists, checks if user is allowed to delete the comment, and deletes it
+const deleteUserComment = async (req, res, next) => {
     try{
         const commentId = req.params.id;
         const redirectTo = req.body.redirect || '/tasks';
@@ -71,8 +71,8 @@ const handleDeleteComment = async (req, res, next) => {
         next(error);
     }
 }
-
-const handleUpdateComment = async (req, res, next) => {
+//checks if the comment, exists checks if the user's role or is allows them to edit the comment, than updates the comment with the new content
+const updateUserComment = async (req, res, next) => {
     try{
         const commentId = req.params.id;
         const redirectTo = req.body.redirect || '/tasks';
@@ -98,4 +98,4 @@ const handleUpdateComment = async (req, res, next) => {
         next(error);
     }
 }
-export { getComments, postComment, handleDeleteComment, handleUpdateComment };
+export { getComments, postComment, deleteUserComment, updateUserComment };
