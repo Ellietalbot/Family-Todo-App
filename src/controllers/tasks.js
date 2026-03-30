@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { requireLogin } from '../middleware/auth.js';
 import { saveTask, getTaskbyTaskId, getTaskByUserId, deleteTask, updateTask, completeTask, getPendingTasksForUser, acceptTask, denyTask, getTasksCreatedByUser } from '../models/forms/task.js';
 import { returnFamilyMemberInfo } from '../models/family.js';
-import { getComments, postComment, handleUpdateComment, handleDeleteComment } from '../controllers/comments.js';
+import { getComments, postComment, updateUserComment, deleteUserComment } from '../controllers/comments.js';
 import { taskValidation, commentValidation } from '../middleware/forms/validation.js';
 import { validationResult } from 'express-validator';
 
@@ -180,8 +180,8 @@ router.post('/:id/delete', requireLogin, deleteUserTask);
 router.post('/:id/accept', requireLogin, acceptUserTask);
 router.post('/:id/deny', requireLogin, denyUserTask);
 router.post('/:id/comment', requireLogin, commentValidation, postComment);
-router.post('/:id/comment/delete', requireLogin, handleDeleteComment)
-router.post('/:id/comment/edit', requireLogin, handleUpdateComment)
+router.post('/:id/comment/delete', requireLogin, deleteUserComment)
+router.post('/:id/comment/edit', requireLogin, updateUserComment)
 
 export default router;
 export { showUsersTasks, processTask, markTaskComplete, editTask, deleteUserTask };

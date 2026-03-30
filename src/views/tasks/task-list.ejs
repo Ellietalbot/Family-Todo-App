@@ -2,7 +2,6 @@
 
 <h3 class="greeting">Let's get started, <%= currentUser.name %>! <i class="bi bi-card-checklist"></i></h3>
 <main>
-    
     <div class="pending-task">
         <h3><i class="bi bi-mailbox-flag"></i> Pending Requests (<%= pendingTasks.length %>)</h3>
         <p>Tasks assigned to you waiting for acceptance</p>
@@ -46,11 +45,15 @@
                                             <form method="POST" action="/tasks/<%= comment.comment_id %>/comment/delete">
                                                 <button type="submit" class="btn-delete"><i class="bi bi-trash"></i></button>
                                             </form>
-                                            <form method="POST" action="/tasks/<%= comment.comment_id %>/comment/edit">
-                                                <button type="submit" class="btn-delete"><i class="bi bi-pencil"></i></button>
-                                            </form>
+                                            <button type="button" class="btn-delete" onclick="toggleCommentEdit(<%= comment.comment_id %>)"><i class="bi bi-pencil"></i></button>
+
+
                                         <% } %>
                                     </div>
+                                    <form id="edit-comment-<%= comment.comment_id %>" style="display: none;" method="POST" action="/tasks/<%= comment.comment_id %>/comment/edit">
+                                        <textarea name="content" ><%= comment.content %> </textarea>
+                                        <button type="submit">Save Changes</button>
+                                    </form>
                                     <p class="comment-content"><%= comment.content %></p>
                                 </div>
                             <% }) %>
@@ -222,11 +225,13 @@
                                                 <form method="POST" action="/tasks/<%= comment.comment_id %>/comment/delete">
                                                     <button type="submit" class="btn-delete"><i class="bi bi-trash"></i></button>
                                                 </form>
-                                                <form method="POST" action="/tasks/<%= comment.comment_id %>/comment/edit">
-                                                    <button type="submit" class="btn-delete"><i class="bi bi-pencil"></i></button>
-                                                </form>
+                                                <button type="button" class="btn-delete" onclick="toggleCommentEdit(<%= comment.comment_id %>)"><i class="bi bi-pencil"></i></button>
                                             <% } %>
                                         </div>
+                                        <form id="edit-comment-<%= comment.comment_id %>" style="display: none;" method="POST" action="/tasks/<%= comment.comment_id %>/comment/edit">
+                                            <textarea name="content" ><%= comment.content %> </textarea>
+                                            <button type="submit">Save Changes</button>
+                                        </form>
                                         <p class="comment-content"><%= comment.content %></p>
                                     </div>
                                 <% }) %>
@@ -284,6 +289,10 @@
         const isOpen = dropdown.style.display !== 'none';
         dropdown.style.display = isOpen ? 'none' : 'flex';
         arrow.classList.toggle('open', !isOpen);
+    }
+    function toggleCommentEdit(commentId) {
+        const form = document.getElementById(`edit-comment-${commentId}`);
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
     }
 </script>
 <%- include('../partials/footer') %>
