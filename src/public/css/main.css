@@ -6,7 +6,7 @@ html, body {
 }
 main {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: 60px;
     margin: 60px;
 }
@@ -14,6 +14,8 @@ main {
     background-color: white;
     padding: 30px;
     flex: 1;
+    display: flex;
+    flex-direction: column;
     border-radius: 25px;
 }
 .home-section h3, p {
@@ -42,12 +44,20 @@ button {
     height: 50px;
     border-radius: 10px;
 }
+.create-task {
+    display: flex;
+    flex-direction: column;
+}
 .create-task button {
     font-size: medium;
     width: 100%;
 }
 .form-group input {
-    height: 50px;
+    height: 70px !important;
+    min-height: 70px !important;
+    box-sizing: border-box;
+    align-self: stretch;
+    flex-shrink: 0;
     background-color: whitesmoke;
     border: none;
     border-radius: 10px;
@@ -59,10 +69,18 @@ button {
     font-size: medium;
     font-weight: 400;
 }
+
+#title, #due_date {
+    height: 70px !important;
+    box-sizing: border-box;
+    padding: 0 14px;
+    -webkit-appearance: none;
+    appearance: none;
+}
 select {
     background-color: whitesmoke;
     border: none;
-    height: 50px;
+    height: 70px;
     padding: 10px;
     padding-right: 40px;
     border-radius: 10px;
@@ -223,7 +241,7 @@ input:hover {
     padding: 30px;
     color: #5d5d5e;
 }
-#task-description {
+#description {
     height: 100px;
     resize: vertical;
     padding: 10px;
@@ -233,7 +251,7 @@ input:hover {
     border: none;
     border-radius: 10px;
 }
-#task-description:hover {
+#description:hover {
     background-color: #e8e8e8;
 }
 .task-layout {

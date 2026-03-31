@@ -57,13 +57,13 @@ CREATE TABLE comments (
     created_at DATE DEFAULT NOW()
 );
 
-INSERT INTO family (family_name, invite_code) VALUES ('The Smiths', 'SMITH-0001');
+INSERT INTO family (family_name, invite_code) VALUES ('Smith', 'SMITH-0001');
 
 INSERT INTO users (name, email, password_hash, role, family_id) VALUES 
-    ('mom', 'email123@gmail.com', '$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uklCt7f5W', 'parent', 1),
-    ('dad', 'emaildad@gmail.com', '$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uklCt7f5W', 'parent', 1),
-    ('Micah', 'Micahkid@gmail.com', '$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uklCt7f5W', 'child', 1),
-    ('Admin', 'admin@familytodo.com', '$2b$10$kCcrkpLTIiIu3Rhzsxp6LORkoTCVmtdFGCr5z4v7zTYCYOzYYn4Di', 'admin', NULL),
-    ('Gabby', 'Gabby@gmail.com', '$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uklCt7f5W', 'child', 1);
+    ('Mom', 'emailparent@gmail.com', '$2b$10$yl5h.v0TOJtl2pwJFt8V7.h8wmg2jNu7GEZdhUjgiADOcLB9SEcqK', 'parent', 1),
+    ('Dad', 'emaildad@gmail.com', '$2b$10$yl5h.v0TOJtl2pwJFt8V7.h8wmg2jNu7GEZdhUjgiADOcLB9SEcqK', 'parent', 1),
+    ('Micah', 'Emailkid@gmail.com', '$2b$10$yl5h.v0TOJtl2pwJFt8V7.h8wmg2jNu7GEZdhUjgiADOcLB9SEcqK', 'child', 1),
+    ('Admin', 'admin@familytodo.com', '$2b$10$yl5h.v0TOJtl2pwJFt8V7.h8wmg2jNu7GEZdhUjgiADOcLB9SEcqK', 'admin', NULL),
+    ('Gabby', 'Gabby@gmail.com', '$2b$10$yl5h.v0TOJtl2pwJFt8V7.h8wmg2jNu7GEZdhUjgiADOcLB9SEcqK', 'child', 1);
 
 COMMIT;

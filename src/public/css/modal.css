@@ -17,13 +17,13 @@ main.modal-page {
     border-radius: 200px;
     border: 2px solid #e87c58;
 }
-h3{
+.setup-page h3 {
     color: #e87c58;
 }
-button{
+.setup-page button {
     width: 100%;
 }
-.task-types{
+.setup-page .task-types.task-types{
     width: 100%;
     justify-self: center;
 }

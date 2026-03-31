@@ -1,5 +1,6 @@
 import db from '../db.js';
 
+//inserts a task into the db
 const saveTask = async (title, description, due_date, category, assigned_to, created_by, family_id, status = 'pending') => {
     const query = `INSERT INTO task (title, description, category, due_date, assigned_to, created_by, family_id, status) 
                    VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
@@ -8,18 +9,21 @@ const saveTask = async (title, description, due_date, category, assigned_to, cre
     return result.rows[0];
 };
 
+//logs the task history for admin view
 const logTaskHistory = async (task_id, changed_by, old_status, new_status) => {
     const query = `INSERT INTO task_history (task_id, changed_by, old_status, new_status) 
                    VALUES ($1, $2, $3, $4)`;
     await db.query(query, [task_id, changed_by, old_status, new_status]);
 };
 
+//looks up the task by task_id
 const getTaskbyTaskId = async (taskId) => {
     const query = `SELECT * FROM task WHERE task_id = $1`;
     const result = await db.query(query, [taskId]);
     return result.rows[0];
 }
 
+//looks up the task by user_id
 const getTaskByUserId = async (user_id) => {
     const query = `
         SELECT task.*, users.name AS assigner_name 
@@ -30,6 +34,7 @@ const getTaskByUserId = async (user_id) => {
     return result.rows;
 };
 
+//returns all the tasks by family_id
 const getAllTasksByFamily = async (family_id) => {
     const query = `
         SELECT task.*, users.name AS assigner_name 
@@ -40,19 +45,21 @@ const getAllTasksByFamily = async (family_id) => {
     return result.rows;
 };
 
+//deletes task
 const deleteTask = async (taskId) => {
     const query = `DELETE FROM task WHERE task_id = $1 RETURNING task_id`;
     const result = await db.query(query, [taskId]);
     return result.rowCount > 0;
 };
 
+//look up who assigned a task
 const getTaskAssigner = async (taskId) => {
     const query = `SELECT users.name FROM users JOIN task ON task.created_by = users.user_id WHERE task.task_id = $1`;
     const result = await db.query(query, [taskId]);
     return result.rows[0];
 };
 
-
+//updates a task
 const updateTask = async (taskId, title, description, due_date, category, assigned_to) => {
     const query = `
         UPDATE task SET title=$1, description=$2, due_date=$3, category=$4, assigned_to=$5
@@ -62,6 +69,7 @@ const updateTask = async (taskId, title, description, due_date, category, assign
     return result.rows[0];
 };
 
+//
 const acceptTask = async (taskId, userId) => {
     const current = await db.query(`SELECT status FROM task WHERE task_id = $1`, [taskId]);
     const old_status = current.rows[0]?.status;
@@ -107,6 +115,7 @@ const getTasksCreatedByUser = async (user_id) => {
     const result = await db.query(query, [user_id]);
     return result.rows;
 };
+
 
 const getPendingTasksForUser = async (user_id) => {
     const query = `

@@ -9,7 +9,7 @@ const serverError = (err, req, res, next) => {
     res.status(err.status || 500).render('errors/500', {
         title: 'Server Error',
         error: err.message,
-        stack: err.stack
+        stack: process.env.NODE_ENV === 'production' ? null : err.stack
     });
 };
 

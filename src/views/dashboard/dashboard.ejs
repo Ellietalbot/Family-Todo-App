@@ -2,131 +2,45 @@
 <h3 class="greeting"><%= greeting %>, <%= currentUser.name %>! <i class="bi bi-card-checklist"></i></h3>
 <main>
         
-        <div class="home-section">
-            <h3>Create New Task</h3>
-            <p>Create a task for yourself or assign it to a family member</p>
-            <form method="POST" action="/" class="create-task">
-                <div class="form-group">
-                    <label for="task-title">Task Title</label>
-                    <input type="text" id="title" name="title" placeholder="Enter task title..." required>
-                </div>
-                <div class="form-group">
-                    <label for="description">Description (optional)</label>
-                    <input type="textarea" id="description" name="description" placeholder="Add more details...">
-                </div>
-                <div class="form-group">
-                    <label for="due_date">Due Date</label>
-                    <input type="date" id="due_date" name="due_date" placeholder="Date Due">
-                </div>
-                <div class="form-group">
-                    <label for="category">Category</label>
-                    <select id="category" name="category">
-                        <option value="other">Other</option>
-                        <option value="chores">Chores</option>
-                        <option value="homework">Homework</option>
-                        <option value="errands">Errands</option>
-                        <option value="personal">Personal</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="assign-to">Assign To</label>
-                    <select id="assign-to" name="assign-to">
-                        <option value="<%= currentUser.user_id %>">Keep for myself</option>
-                        <% users.forEach(member => { %>
-                            <option value="<%= member.user_id %>"><%= member.name %></option>
-                        <% }) %>
-                    </select>
-                </div>
-                <button type="submit">Create Task</button>
-            </form>
-        </div>
-
-        <div class="home-section">
-            <h3>My Tasks</h3>
-            <p>Manage your personal and accepted tasks.</p>
-            <div class="task-types">
-                <button class="active">Active</button>
-                <button>Completed</button>
-                <button>Delegated</button>
+    <div class="home-section">
+        <h3>Create New Task</h3>
+        <p>Create a task for yourself or assign it to a family member</p>
+        <form method="POST" action="/" class="create-task">
+            <div class="form-group">
+                <label for="task-title">Task Title</label>
+                <input type="text" id="title" name="title" placeholder="Enter task title..." required>
             </div>
-
-            <div class="task-list" id="active-tasks">
-                <% tasks.forEach(task => { %>
-                    <div class="task-card category-<%= task.category.toLowerCase() %>">
-                        <div class="task-card-top">
-                            <div class="task-card-info">
-                                <p><strong class="task-title"><%= task.title %></strong> <span class='task-category-tag'><%= task.category %></span> <span class="status">Active</span></p>
-                            </div>
-                            <div class="task-actions">
-                                <form method="POST" action="/tasks/<%= task.task_id %>/complete">
-                                    <input type="hidden" name="redirect" value="/">
-                                    <button type="submit">Complete</button>
-                                </form>
-                                <form method="POST" action="/tasks/<%= task.task_id %>/delete">
-                                    <input type="hidden" name="redirect" value="/">
-                                    <button type="submit" class="btn-delete"><i class="bi bi-trash"></i></button>
-                                </form>
-                            </div>
-                        </div>
-                        <p><%= task.description %></p>
-                        <p>Created by: <%= task.assigner_name %></p>
-                    </div>
-                <% }) %>
+            <div class="form-group">
+                <label for="description">Description (optional)</label>
+                <textarea id="description" name="description" placeholder="Add more details..."></textarea>
             </div>
-
-            <div class="task-list" id="completed-tasks" style="display:none;">
-                <% completedTasks.forEach(task => { %>
-                    <div class="task-card category-<%= task.category.toLowerCase() %>" style="opacity: 0.6;">
-                        <div class="task-card-top">
-                            <div class="task-card-info">
-                                <p><strong class="task-title" style="text-decoration: line-through;"><%= task.title %></strong>
-                                <span class="task-category-tag"><%= task.category %></span>
-                                <span class="status">Completed</span></p>
-                            </div>
-                            <div class="task-actions">
-                                <form method="POST" action="/tasks/<%= task.task_id %>/delete">
-                                    <input type="hidden" name="redirect" value="/">
-                                    <button type="submit" class="btn-delete"><i class="bi bi-trash"></i></button>
-                                </form>
-                            </div>
-                        </div>
-                        <p><%= task.description %></p>
-                    </div>
-                <% }) %>
+            <div class="form-group">
+                <label for="due_date">Due Date</label>
+                <input type="date" id="due_date" name="due_date" placeholder="Date Due">
             </div>
-
-            <div class="task-list" id="delegated-tasks" style="display:none;">
-                <% delegatedTasks.forEach(task => { %>
-                    <div class="task-card category-<%= task.category.toLowerCase() %>">
-                        <div class="task-card-top">
-                            <div class="task-card-info">
-                                <p><strong class="task-title"><%= task.title %></strong>
-                                <span class="task-category-tag"><%= task.category %></span>
-                                <span class="status">Delegated</span></p>
-                            </div>
-                        </div>
-                        <p><%= task.description %></p>
-                        <p>Assigned to: <%= task.assigned_name %></p>
-                    </div>
-                <% }) %>
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select id="category" name="category">
+                    <option value="other">Other</option>
+                    <option value="chores">Chores</option>
+                    <option value="homework">Homework</option>
+                    <option value="errands">Errands</option>
+                    <option value="personal">Personal</option>
+                </select>
             </div>
+            <div class="form-group">
+                <label for="assign-to">Assign To</label>
+                <select id="assign-to" name="assign-to">
+                    <option value="<%= currentUser.user_id %>">Keep for myself</option>
+                    <% users.forEach(member => { %>
+                        <option value="<%= member.user_id %>"><%= member.name %></option>
+                    <% }) %>
+                </select>
+            </div>
+            <button type="submit">Create Task</button>
+        </form>
+    </div>
 
-        </div>
     </main>
-    <script>
-        const taskTypeButtons = document.querySelectorAll('.task-types button');
-        const activeTasks = document.getElementById('active-tasks');
-        const completedTasks = document.getElementById('completed-tasks');
-        const delegatedTasks = document.getElementById('delegated-tasks');
 
-        taskTypeButtons.forEach((button, index) => {
-            button.addEventListener('click', () => {
-                taskTypeButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-                activeTasks.style.display = index === 0 ? 'flex' : 'none';
-                completedTasks.style.display = index === 1 ? 'flex' : 'none';
-                delegatedTasks.style.display = index === 2 ? 'flex' : 'none';
-            });
-        });
-    </script>
 <%- include('../partials/footer') %>

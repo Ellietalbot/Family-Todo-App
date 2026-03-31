@@ -11,6 +11,8 @@ const returnFamilyMemberInfo = async (familyId) => {
     const result = await db.query(query, [familyId]);
     return result.rows;
 };
+
+
 const getFamilyById = async (familyId) => {
     const result = await db.query(
         `SELECT * FROM family WHERE family_id = $1`,

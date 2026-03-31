@@ -31,6 +31,8 @@ const deleteUser = async (userId) => {
     return result.rowCount > 0;
 };
 
+//generates the invite code by getting the first 5 or less characters of the family name and the attaching random letters and numbers.
+//Claude helped with this
 const generateInviteCode = (familyName) => {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     const part1 = familyName.trim().toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 5);
@@ -40,6 +42,8 @@ const generateInviteCode = (familyName) => {
     }
     return `${part1}-${part2}`;
 }
+
+//returns a unique family it calls generateInviteCode checks if it already exists and if not it returns it.
 const generateUniqueInviteCode = async (familyName) => {
     let code;
     let exists = true;
@@ -52,9 +56,10 @@ const generateUniqueInviteCode = async (familyName) => {
         );
         exists = result.rows.length > 0;
     }
-
     return code;
 };
+
+//Inserts the family info into the database
 const createFamily = async (familyName, inviteCode) => {
     const result = await db.query(
         `INSERT INTO family (family_name, invite_code) 
@@ -65,6 +70,7 @@ const createFamily = async (familyName, inviteCode) => {
     return result.rows[0];
 };
 
+// finds the family by the invite code
 const findFamilyByInviteCode = async (inviteCode) => {
     const result = await db.query(
         `SELECT * FROM family WHERE invite_code = $1`,

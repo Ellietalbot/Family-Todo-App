@@ -24,5 +24,4 @@ const returnFamilyMembers = async (req, res, next) => {
     }
 };
 
-
 export { returnFamilyMembers }
