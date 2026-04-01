@@ -1,6 +1,6 @@
 import session from 'express-session';
 import connectPgSimple from 'connect-pg-simple';
-import { caCert } from '../models/db.js';
+import { pool } from '../models/db.js';
 
 const pgSession = connectPgSimple(session);
 
@@ -10,16 +10,9 @@ const pgSession = connectPgSimple(session);
 
 const sessionMiddleware = session({
     store: new pgSession({
-        conObject: {
-            connectionString: process.env.DB_URL,
-            ssl: {
-                ca: caCert,
-                rejectUnauthorized: true,
-                checkServerIdentity: () => { return undefined; }
-            }
-        },
-        tableName: 'session',
-        createTableIfMissing: true
+    pool: pool,
+    tableName: 'session',
+    createTableIfMissing: true
     }),
     secret: process.env.SESSION_SECRET || 'changeme-dev-only',
     resave: false,

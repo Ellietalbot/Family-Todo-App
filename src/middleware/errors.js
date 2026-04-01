@@ -6,6 +6,7 @@ const notFound = (req, res, next) => {
 // Logs the errors to the console. Sets the HTTP status to 500 and displays the 500 page
 const serverError = (err, req, res, next) => {
     console.error(err.stack);
+    if (res.headersSent) return next(err); 
     res.status(err.status || 500).render('errors/500', {
         title: 'Server Error',
         error: err.message,

@@ -11,13 +11,13 @@ const caCert = fs.readFileSync(path.join(__dirname, '../../bin', 'byuicse-psql-c
 
 const pool = new Pool({
     connectionString: process.env.DB_URL,
+    max: 2,
     ssl: {
         ca: caCert,  
         rejectUnauthorized: true,  
         checkServerIdentity: () => { return undefined; }
     }
 });
-
 let db = null;
 
 if (process.env.NODE_ENV?.includes('dev') && process.env.ENABLE_SQL_LOGGING === 'true') {
@@ -52,4 +52,4 @@ if (process.env.NODE_ENV?.includes('dev') && process.env.ENABLE_SQL_LOGGING === 
 }
 
 export default db;
-export { caCert };
+export { caCert , pool };

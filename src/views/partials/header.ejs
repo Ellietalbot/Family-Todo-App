@@ -20,7 +20,7 @@
         <a href="/"><img src="/images/logo.png" alt="logo"></a>
         <nav>
             <ul>
-                <% if (isLoggedIn) { %>
+                <% if (locals.isLoggedIn) { %>
                     <% if (currentUser && currentUser.role === 'parent') { %>
                         <li><a href="/">Home</a></li>
                     <% } %>
@@ -46,11 +46,11 @@
             </ul>
         </nav>
     </header>
-<% const hasMessages = Object.values(messages).some(arr => arr.length > 0); %>
+<% const hasMessages = Object.values(locals.messages || {}).some(arr => arr.length > 0); %>
 <% if (hasMessages) { %>
     <div class="flash-messages">
-        <% Object.keys(messages).forEach(type => { %>
-            <% messages[type].forEach(message => { %>
+        <% Object.keys(locals.messages || {}).forEach(type => { %>
+            <% locals.messages[type].forEach(message => { %>
                 <div class="flash <%= type %>">
                     <%= message %>
                 </div>
