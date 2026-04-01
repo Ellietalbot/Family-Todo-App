@@ -26,7 +26,7 @@ app.use(addFlashMessages);
 
 app.set('view engine', 'ejs');
 app.set('views', './src/views');
-app.use(express.static(join(__dirname, 'src/public')));
+app.use(express.static(join(__dirname, 'public')));
 
 
 app.use(router);
