@@ -63,7 +63,7 @@ INSERT INTO users (name, email, password_hash, role, family_id) VALUES
     ('Mom', 'emailparent@gmail.com', '$2b$10$yl5h.v0TOJtl2pwJFt8V7.h8wmg2jNu7GEZdhUjgiADOcLB9SEcqK', 'parent', 1),
     ('Dad', 'emaildad@gmail.com', '$2b$10$yl5h.v0TOJtl2pwJFt8V7.h8wmg2jNu7GEZdhUjgiADOcLB9SEcqK', 'parent', 1),
     ('Micah', 'Emailkid@gmail.com', '$2b$10$yl5h.v0TOJtl2pwJFt8V7.h8wmg2jNu7GEZdhUjgiADOcLB9SEcqK', 'child', 1),
-    ('Admin', 'admin@familytodo.com', '$2b$10$yl5h.v0TOJtl2pwJFt8V7.h8wmg2jNu7GEZdhUjgiADOcLB9SEcqK', 'admin', NULL),
+    ('Admin', 'admin@familytodo.com', '$2b$10$yl5h.v0TOJtl2pwJFt8V7.h8wmg2jNu7GEZdhUjgiADOcLB9SEcqK', 'admin', 1),
     ('Gabby', 'Gabby@gmail.com', '$2b$10$yl5h.v0TOJtl2pwJFt8V7.h8wmg2jNu7GEZdhUjgiADOcLB9SEcqK', 'child', 1);
 
 COMMIT;

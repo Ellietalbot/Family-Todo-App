@@ -1,0 +1,229 @@
+/* ── Mobile Responsive Styles ── */
+/* Add this file to /src/public/css/responsive.css        */
+/* Then add to header.ejs:                                */
+/* <link rel="stylesheet" href="/css/responsive.css">     */
+
+@media (max-width: 768px) {
+
+    /* ── Base ── */
+    html, body {
+        padding: 10px;
+    }
+
+    .greeting {
+        font-size: 28px;
+        padding-left: 10px;
+    }
+
+    /* ── Header / Nav ── */
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        margin: 0;
+        padding: 10px 16px;
+        gap: 10px;
+    }
+
+    header img {
+        width: 180px;
+    }
+
+    nav ul {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    ul li {
+        height: auto;
+    }
+
+    li a {
+        font-size: medium;
+        padding: 6px 12px;
+    }
+
+    .logout {
+        font-size: medium;
+        padding: 6px 12px;
+    }
+
+    /* ── Main layout ── */
+    main {
+        margin: 10px 0;
+        gap: 20px;
+    }
+
+    .home-section {
+        padding: 16px;
+        border-radius: 15px;
+    }
+
+    .home-section h3,
+    .home-section p {
+        padding-left: 0;
+    }
+
+    h3 {
+        padding-left: 0;
+        font-size: large;
+    }
+
+    /* ── Task form ── */
+    .form-group {
+        padding: 10px 0;
+    }
+
+    .form-group input,
+    select {
+        height: 54px !important;
+        min-height: 54px !important;
+        font-size: 16px; /* prevents iOS zoom on focus */
+    }
+
+    #title, #due_date {
+        height: 54px !important;
+    }
+
+    #description {
+        font-size: 16px;
+    }
+
+    /* ── Task type tabs ── */
+    .task-types {
+        margin: 10px 0 16px 0;
+    }
+
+    .task-types button {
+        font-size: small;
+        height: 38px;
+    }
+
+    /* ── Task cards ── */
+    .task-card {
+        margin: 0;
+    }
+
+    .task-card-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .task-card .task-actions {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .task-card .task-actions button {
+        flex: 1;
+    }
+
+    /* ── Pending tasks ── */
+    .pending-task {
+        padding: 16px;
+        border-radius: 15px;
+    }
+
+    .pending-task button {
+        flex: 1;
+    }
+
+    /* ── Family page ── */
+    .family-main {
+        margin: 10px 0;
+        gap: 20px;
+    }
+
+    .card-head {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .person-cards-row {
+        flex-direction: column;
+    }
+
+    .person-cards-row .home-section {
+        flex: 1 1 100%;
+    }
+
+    .person-section-title hr {
+        margin: 10px -16px;
+    }
+
+    .tasks-person-completed {
+        margin-left: 0;
+    }
+
+    /* ── Admin page ── */
+    .quick-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .admin-section {
+        padding: 16px;
+        border-radius: 12px;
+    }
+
+    .admin-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .admin-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .admin-table {
+        font-size: 12px;
+    }
+
+    .admin-table th,
+    .admin-table td {
+        padding: 8px 6px 8px 0;
+    }
+
+    .home-section > form {
+        flex-direction: column;
+        padding: 0;
+        gap: 8px;
+    }
+
+    .home-section > form button {
+        width: 100%;
+    }
+
+    /* ── Setup/modal page ── */
+    .setup-page {
+        width: 100%;
+        padding: 20px 16px;
+        box-sizing: border-box;
+    }
+
+    .role-image {
+        max-width: 180px;
+    }
+
+    /* ── Flash messages ── */
+    .flash-messages {
+        padding: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    /* ── Extra small screens ── */
+    .quick-stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .quick-stat-card h3 {
+        font-size: 26px;
+    }
+
+    .task-category-tag,
+    .status {
+        font-size: small;
+    }
+}

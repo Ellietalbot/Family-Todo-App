@@ -41,7 +41,7 @@ async function start() {
     await setupDatabase();
     await testConnection();
     app.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}`);
+        console.log(`Server is running on http://127.0.0.1:${PORT}`);
     });
 }
 
