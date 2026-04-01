@@ -1,6 +1,7 @@
 import { Router } from 'express';
-import { returnFamilyMembers, processLogout } from './index.js';
 import { requireLogin } from '../middleware/auth.js';
+import { returnFamilyMembers } from './family.js';
+import { processLogout } from './login.js';
 import registrationRouter from './registration.js';
 import loginRouter from './login.js';
 import dashboardRouter from './dashboard.js';
